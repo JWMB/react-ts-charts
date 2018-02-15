@@ -242,7 +242,7 @@ export class Chart extends React.Component<Props, State> {
             }
             return '#ff0000';
         };
-        const configCopy = this.props.config;
+        const configCopy = Object.assign({}, this.props.config);
         if (configCopy.yAxis) {
             if (configCopy.yAxis.constructor !== Array) {
                 configCopy.yAxis = [configCopy.yAxis] as hs.AxisOptions[];
@@ -257,6 +257,9 @@ export class Chart extends React.Component<Props, State> {
                         ax.labels.style.color = fGetColorFromStrRef(ax.labels.style.color);
                 }
             });
+        }
+        if (configCopy.title && typeof configCopy.title === 'string') {
+            delete configCopy.title;
         }
         WhileWaitingForDeepMerge.mergeDeep(config, configCopy);
 

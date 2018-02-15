@@ -1,0 +1,67 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "ChartConfig": {
+            "properties": {
+                "defaultSource": {
+                    "type": "string"
+                },
+                "series": {
+                    "items": {
+                        "$ref": "#/definitions/MySeriesOptions"
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "xAxis": {
+                },
+                "yAxis": {
+                }
+            },
+            "type": "object"
+        },
+        "Config": {
+            "properties": {
+                "charts": {
+                    "items": {
+                        "$ref": "#/definitions/ChartConfig"
+                    },
+                    "type": "array"
+                },
+                "sources": {
+                    "items": {
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "url": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "MySeriesOptions": {
+            "properties": {
+                "source": {
+                    "type": "string"
+                },
+                "sourceRef": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "patternProperties": {
+        "^(Config|config)$": { "$ref": "#/definitions/Config" }
+    }
+
+}
+

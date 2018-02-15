@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button } from 'reactstrap';
 import MonacoEditor from 'react-monaco-editor';
+import * as schema from './editorSchema.json';
 
 type Props = {
     data: string;
@@ -12,7 +13,8 @@ type State = {
 };
 export class JsonEditor extends React.Component<Props, State> {
     componentWillMount() {
-        this.setState({ text: this.props.data, warnings: '' });
+        const code = '{\n  "$schema": "mySchema",\n  "config": ' + this.props.data + '\n}';
+        this.setState({ text: code, warnings: '' }); // this.props.data
     }
     render() {
         const code = this.state.text;
@@ -64,55 +66,58 @@ export class JsonEditor extends React.Component<Props, State> {
         // https://github.com/Microsoft/monaco-editor/issues/191
         // var model = monaco.editor.createModel(jsonCode, 'json', 'internal://server/foo.json');
         // monaco.editor.create(document.getElementById("container"), { model: model });
-        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+        // tslint:disable-next-line:no-console
+        // console.log('schema?', schema);
+        // const tmpSchema = {
+        //     // 'title': 'Test schema',
+        //     '$schema': 'http://json-schema.org/draft-04/schema#',
+        //     // 'type': 'object',
+        //     'definitions': {
+        //         'anObject': {
+        //             'type': 'object',
+        //             'description': 'Settings',
+        //             'properties': {
+        //                 'aBoolean': {
+        //                     'description': '',
+        //                     'type': 'boolean'
+        //                 },
+        //                 'aNumber': {
+        //                     'description': '',
+        //                     'type': 'number',
+        //                     'default': 1
+        //                 }
+        //             }
+        //         },
+        //         'another': {
+        //             'type': 'object',
+        //             'description': 'Some other description',
+      
+        //             'properties': {
+        //                 'url': {
+        //                     'description': '',
+        //                     'type': 'string',
+        //                     'pattern': '^((//|https?://).+|)$'
+        //                 },
+        //                 'prefetch': {
+        //                     'type': 'boolean',
+        //                     'default': true
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     'patternProperties': {
+        //         '^anObject$': { '$ref': '#/definitions/anObject' },
+        //         '^anobject$': { '$ref': '#/definitions/anObject' },
+        //         '^(another|Another)$': { '$ref': '#/definitions/another' }
+        //     }
+        // };
+        editor.languages.json.jsonDefaults.setDiagnosticsOptions({
             validate: true,
             allowComments: true,
             schemas: [
                 {
-                    uri: 'http://myserver/foo-schema.json',
-                    schema: {
-                        'title': 'Test schema',
-                        '$schema': 'http://json-schema.org/draft-04/schema#',
-                        'type': 'object',
-                        'definitions': {
-                            'anObject': {
-                                'type': 'object',
-                                'description': 'Settings',
-                                'properties': {
-                                    'aBoolean': {
-                                        'description': '',
-                                        'type': 'boolean'
-                                    },
-                                    'aNumber': {
-                                        'description': '',
-                                        'type': 'number',
-                                        'default': true
-                                    }
-                                }
-                            },
-                            'another': {
-                                'type': 'object',
-                                'description': 'Some other description',
-                  
-                                'properties': {
-                                    'url': {
-                                        'description': '',
-                                        'type': 'string',
-                                        'pattern': '^((//|https?://).+|)$'
-                                    },
-                                    'prefetch': {
-                                        'type': 'boolean',
-                                        'default': true
-                                    }
-                                }
-                            }
-                        },
-                        'patternProperties': {
-                            '^anObject$': { '$ref': '#/definitions/anObject' },
-                            '^anobject$': { '$ref': '#/definitions/anObject' },
-                            '^(another|Another)$': { '$ref': '#/definitions/another' }
-                        }
-                    }
+                    uri: 'mySchema', // http://myserver/foo-schema.json
+                    schema: schema
                 }
             ]
         });
@@ -122,7 +127,12 @@ export class JsonEditor extends React.Component<Props, State> {
             return;
         }
         if (this.props.onSubmit) {
-            this.props.onSubmit(this.state.text);
+            const parsed = JSON.parse(this.state.text);
+            if (parsed.config) {
+                this.props.onSubmit(JSON.stringify(parsed.config));
+            } else {
+                this.props.onSubmit(this.state.text);
+            }
         }
     }
     private validate(): boolean {
