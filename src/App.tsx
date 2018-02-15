@@ -2,7 +2,6 @@ import * as React from 'react';
 import './App.css';
 import { ChartsAndSources } from './chartsAndSources';
 import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col, Card, CardTitle, CardText, Button } from 'reactstrap';
-// import MonacoEditor from 'react-monaco-editor';
 
 type State = {
   activeTab: string;
@@ -20,10 +19,7 @@ class App extends React.Component<object, State> {
     }
   }
   render() {
-    // const code = 'function hello() { }';
-    // const options = {
-    //   selectOnLineNumbers: true
-    // };
+
     return (
       <div className="App">
         <header className="App-header">
@@ -50,17 +46,6 @@ class App extends React.Component<object, State> {
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="1">
             <ChartsAndSources />
-            {/* <MonacoEditor
-              width="800"
-              height="600"
-              language="javascript"
-              theme="vs-dark"
-              value={code}
-              options={options}
-              // onChange={::this.onChange}
-              // editorDidMount={::this.editorDidMount}
-            />
- */}
           </TabPane>
           <TabPane tabId="2">
             <Row>
