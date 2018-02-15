@@ -16,8 +16,9 @@ export class JsonEditor extends React.Component<Props, State> {
     }
     render() {
         const code = this.state.text;
-        const options = {
-          selectOnLineNumbers: true
+        const options: monaco.editor.IEditorOptions = {
+            selectOnLineNumbers: true,
+            parameterHints: true  
         };
         const requireConfig = {
           url: 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.1/require.min.js',
@@ -59,42 +60,60 @@ export class JsonEditor extends React.Component<Props, State> {
     }
     // tslint:disable-next-line:no-any
     private handleMonacoWillMount = (editor: typeof monaco) => {
-        editor.languages.json.jsonDefaults.setDiagnosticsOptions({
+        // editor.languages.json.jsonDefaults.onDidChange
+        // https://github.com/Microsoft/monaco-editor/issues/191
+        // var model = monaco.editor.createModel(jsonCode, 'json', 'internal://server/foo.json');
+        // monaco.editor.create(document.getElementById("container"), { model: model });
+        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
             validate: true,
             allowComments: true,
             schemas: [
                 {
                     uri: 'http://myserver/foo-schema.json',
                     schema: {
-                        '$schema': 'http://json-schema.org/draft-06/schema#',
-                        'title': 'Product',
-                        'description': 'A product from Acme\'s catalog',
+                        'title': 'Test schema',
+                        '$schema': 'http://json-schema.org/draft-04/schema#',
                         'type': 'object',
-                        'properties': {
-                            'id': {
-                                'description': 'The unique identifier for a product',
-                                'type': 'integer'
+                        'definitions': {
+                            'anObject': {
+                                'type': 'object',
+                                'description': 'Settings',
+                                'properties': {
+                                    'aBoolean': {
+                                        'description': '',
+                                        'type': 'boolean'
+                                    },
+                                    'aNumber': {
+                                        'description': '',
+                                        'type': 'number',
+                                        'default': true
+                                    }
+                                }
+                            },
+                            'another': {
+                                'type': 'object',
+                                'description': 'Some other description',
+                  
+                                'properties': {
+                                    'url': {
+                                        'description': '',
+                                        'type': 'string',
+                                        'pattern': '^((//|https?://).+|)$'
+                                    },
+                                    'prefetch': {
+                                        'type': 'boolean',
+                                        'default': true
+                                    }
+                                }
                             }
                         },
-                        'required': ['id']
+                        'patternProperties': {
+                            '^anObject$': { '$ref': '#/definitions/anObject' },
+                            '^anobject$': { '$ref': '#/definitions/anObject' },
+                            '^(another|Another)$': { '$ref': '#/definitions/another' }
+                        }
                     }
                 }
-                // {
-                //     uri: 'http://myserver/foo-schema.json',
-                //     schema: {
-                //     type: 'object',
-                //         properties: {
-                //             p1: { enum: ['v1', 'v2'] },
-                //             p2: { $ref: 'http://myserver/bar-schema.json' }
-                //         }
-                //     }
-                // }, {
-                //     uri: 'http://myserver/bar-schema.json',
-                //     schema: {
-                //     type: 'object',
-                //     properties: { q1: { enum: [ 'x1', 'x2'] } }
-                //     }
-                // }
             ]
         });
     }
@@ -121,6 +140,10 @@ export class JsonEditor extends React.Component<Props, State> {
         if (this.state.warnings) {
             this.validate();
         }
+        // const markers = monaco.editor.getModelMarkers({});
+        // if (markers.length) {
+        //     markers.filter(m => m.severity > 2).map(m => m.message);
+        // }
         this.setState({ text: newValue });
     }
     // private handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
