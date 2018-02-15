@@ -1,4 +1,4 @@
-// import * as hs from 'highcharts';
+import { SeriesOptions } from 'highcharts';
 
 // export interface Interface1 {
 //     aStringOrNumber: number | string;
@@ -30,16 +30,16 @@
     }
  */
 
-// export interface MySeriesOptions extends hs.SeriesOptions {
-//     sourceRef: string;
-//     source: string;
-//     // transforms?: TransformSettings[];
-// }
-export interface MySeriesOptions {
+export interface MySeriesOptions extends SeriesOptions {
     sourceRef: string;
     source: string;
     // transforms?: TransformSettings[];
 }
+// export interface MySeriesOptions {
+//     sourceRef: string;
+//     source: string;
+//     // transforms?: TransformSettings[];
+// }
 
 export interface ChartConfig {
     // source: DataSource | string;

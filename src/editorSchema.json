@@ -47,13 +47,1241 @@
             },
             "type": "object"
         },
+        "Highcharts.Animation": {
+            "properties": {
+                "duration": {
+                    "description": "The duration of the animation in milliseconds.",
+                    "type": "number"
+                },
+                "easing": {
+                    "description": "When using jQuery as the general framework, the easing can be set to linear or swing. More easing functions are\navailable with the use of jQuery plug-ins, most notably the jQuery UI suite. See the\n{@link http://api.jquery.com/animate/|jQuery docs}. When using MooTools as the general framework, use the\nproperty name transition instead of easing.",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.AreaZone": {
+            "properties": {
+                "className": {
+                    "description": "Styled mode only. A custom class name for the zone.",
+                    "type": "string"
+                },
+                "color": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "description": "Defines the color of the series."
+                },
+                "dashStyle": {
+                    "description": "A name for the dash style to use for the graph.",
+                    "type": "string"
+                },
+                "fillColor": {
+                    "description": "Defines the fill color for the series (in area type series)",
+                    "type": "string"
+                },
+                "value": {
+                    "default": "undefined",
+                    "description": "The value up to where the zone extends, if undefined the zones stretches to the last value in the series.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.CSSObject": {
+            "properties": {
+                "background": {
+                    "type": "string"
+                },
+                "border": {
+                    "type": "string"
+                },
+                "color": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "cursor": {
+                    "type": "string"
+                },
+                "font": {
+                    "type": "string"
+                },
+                "fontFamily": {
+                    "type": "string"
+                },
+                "fontSize": {
+                    "type": "string"
+                },
+                "fontWeight": {
+                    "type": "string"
+                },
+                "left": {
+                    "type": "string"
+                },
+                "opacity": {
+                    "type": "number"
+                },
+                "padding": {
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                },
+                "position": {
+                    "type": "string"
+                },
+                "textOutline": {
+                    "type": "string"
+                },
+                "textOverflow": {
+                    "type": "string"
+                },
+                "top": {
+                    "type": "string"
+                },
+                "whiteSpace": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.DataLabels": {
+            "properties": {
+                "align": {
+                    "default": "'center'",
+                    "description": "The alignment of the data label compared to the point. If right, the right side of the label should be touching\nthe point. For points with an extent, like columns, the alignments also dictates how to align it inside the box,\nas given with the inside option. Can be one of 'left', 'center' or 'right'.",
+                    "type": "string"
+                },
+                "allowOverlap": {
+                    "default": false,
+                    "description": "Whether to allow data labels to overlap. To make the labels less sensitive for overlapping, the\ndataLabels.padding can be set to 0.",
+                    "type": "boolean"
+                },
+                "backgroundColor": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "description": "The background color or gradient for the data label."
+                },
+                "borderColor": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "description": "The border color for the data label."
+                },
+                "borderRadius": {
+                    "default": 0,
+                    "description": "The border radius in pixels for the data label.",
+                    "type": "number"
+                },
+                "borderWidth": {
+                    "default": 0,
+                    "description": "The border width in pixels for the data label.",
+                    "type": "number"
+                },
+                "className": {
+                    "description": "A class name for the data label. Particularly in styled mode, this can be used to give each series' or point's\ndata label unique styling. In addition to this option, a default color class name is added so that we can give\nthe labels a contrast text shadow.",
+                    "type": "string"
+                },
+                "color": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "default": null,
+                    "description": "The text color for the data labels."
+                },
+                "crop": {
+                    "default": "2.3.3",
+                    "description": "Whether to hide data labels that are outside the plot area. By default, the data label is moved inside the plot\narea according to the overflow option.",
+                    "type": "boolean"
+                },
+                "defer": {
+                    "default": true,
+                    "description": "Whether to defer displaying the data labels until the initial series animation has finished.",
+                    "type": "boolean"
+                },
+                "enabled": {
+                    "default": false,
+                    "description": "Enable or disable the data labels.",
+                    "type": "boolean"
+                },
+                "format": {
+                    "default": "{y}",
+                    "description": "A format string for the data label. Available variables are the same as for formatter.",
+                    "type": "string"
+                },
+                "formatter": {
+                    "description": "Callback JavaScript function to format the data label. Note that if a format is defined, the format takes\nprecedence and the formatter is ignored.\nAvailable data are:\n- this.percentage Stacked series and pies only. The point's percentage of the total.\n- this.point      The point object. The point name, if defined, is available through this.point.name.\n- this.series     The series object. The series name is available through this.series.name.\n- this.total      Stacked series only. The total value at this point's x value.\n- this.x:         The x value.\n- this.y:         The y value.",
+                    "type": "object"
+                },
+                "inside": {
+                    "description": "For points with an extent, like columns, whether to align the data label inside the box or to the actual value\npoint. Defaults to false in most cases, true in stacked columns.",
+                    "type": "boolean"
+                },
+                "overflow": {
+                    "default": "'justify'",
+                    "description": "How to handle data labels that flow outside the plot area. The default is 'justify', which aligns them inside the\nplot area. For columns and bars, this means it will be moved inside the bar. To display data labels outside the\nplot area, set crop to false and overflow to 'none'.",
+                    "type": "string"
+                },
+                "padding": {
+                    "default": 5,
+                    "description": "When either the borderWidth or the backgroundColor is set, this  is the padding within the box.",
+                    "type": "number"
+                },
+                "reserveSpace": {
+                    "default": true,
+                    "description": "Whether to reserve space for the labels. This can be turned off when for example the labels are rendered inside\nthe plot area instead of outside.",
+                    "type": "boolean"
+                },
+                "rotation": {
+                    "default": 0,
+                    "description": "Text rotation in degrees. Note that due to a more complex structure, backgrounds, borders and padding will be\nlost on a rotated data label.",
+                    "type": "number"
+                },
+                "shadow": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Shadow"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "default": false,
+                    "description": "The shadow of the box. Works best with borderWidth or backgroundColor. Since 2.3 the shadow can be an object\nconfiguration containing color, offsetX, offsetY, opacity and width."
+                },
+                "shape": {
+                    "default": "'square'",
+                    "description": "The name of a symbol to use for the border around the label. Symbols are predefined functions on the Renderer\nobject.",
+                    "type": "string"
+                },
+                "style": {
+                    "$ref": "#/definitions/Highcharts.CSSObject",
+                    "default": "{'color': 'contrast', 'fontSize': '11px', 'fontWeight': 'bold', 'textShadow': '0 0 6px contrast, 0 0 3px contrast' }",
+                    "description": "Styles for the label."
+                },
+                "useHTML": {
+                    "default": false,
+                    "description": "Whether to {@link http://www.highcharts.com/docs/chart-concepts/labels-and-string-formatting#html|use HTML} to render the labels.",
+                    "type": "boolean"
+                },
+                "verticalAlign": {
+                    "description": "The vertical alignment of a data label. Can be one of top, middle or bottom. The default value depends on the\ndata, for instance in a column chart, the label is above positive values and below negative values.",
+                    "type": "string"
+                },
+                "x": {
+                    "default": 0,
+                    "description": "The x position offset of the label relative to the point.",
+                    "type": "number"
+                },
+                "y": {
+                    "default": -6,
+                    "description": "The y position offset of the label relative to the point.",
+                    "type": "number"
+                },
+                "zIndex": {
+                    "default": 6,
+                    "description": "The Z index of the data labels. The default Z index puts it above the series. Use a Z index of 2 to display it\nbehind the series.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.DataPoint": {
+            "properties": {
+                "color": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "default": "undefined",
+                    "description": "Individual color for the point. By default the color is pulled from the global colors array."
+                },
+                "colorValue": {
+                    "default": "undefined",
+                    "description": "Serves a purpose only if a colorAxis object is defined in the chart options. This value will decide which color\nthe point gets from the scale of the colorAxis.",
+                    "type": "number"
+                },
+                "dataLabels": {
+                    "$ref": "#/definitions/Highcharts.DataLabels",
+                    "description": "Individual data label for each point. The options are the same as the ones for plotOptions.series.dataLabels"
+                },
+                "drilldown": {
+                    "description": "The id of a series in the drilldown.series array to use for a drilldown for this point.",
+                    "type": "string"
+                },
+                "events": {
+                    "$ref": "#/definitions/Highcharts.PointEvents",
+                    "description": "Individual point events"
+                },
+                "high": {
+                    "description": "The high or maximum value for each data point.",
+                    "type": "number"
+                },
+                "id": {
+                    "description": "An id for the point. This can be used after render time to get a pointer to the point object through chart.get().",
+                    "type": "string"
+                },
+                "innerRadius": {
+                    "description": "The inner radius of an individual point in a solid gauge. Can be given as a number (pixels) or percentage string.",
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                },
+                "isIntermediateSum": {
+                    "default": false,
+                    "description": "When this property is true, the points acts as a summary column for the values added or substracted since the\nlast intermediate sum, or since the start of the series. The y value is ignored.",
+                    "type": "boolean"
+                },
+                "isSum": {
+                    "default": false,
+                    "description": "When this property is true, the point display the total sum across the entire series. The y value is ignored.",
+                    "type": "boolean"
+                },
+                "legendIndex": {
+                    "description": "The sequential index of the data point in the legend.",
+                    "type": "number"
+                },
+                "low": {
+                    "description": "The low or minimum value for each data point.",
+                    "type": "number"
+                },
+                "marker": {
+                    "$ref": "#/definitions/Highcharts.Marker"
+                },
+                "median": {
+                    "description": "The median for each data point. This is drawn as a line through the middle area of the box.",
+                    "type": "number"
+                },
+                "name": {
+                    "description": "The name of the point as shown in the legend, tooltip, dataLabel etc.\n\nIf the xAxis.type is set to category, and no categories option exists, the category will be pulled from the\npoint.name of the last series defined. For multiple series, best practice however is to define xAxis.categories.",
+                    "type": "string"
+                },
+                "parent": {
+                    "default": "undefined",
+                    "description": "Only for treemap. Use this option to build a tree structure. The value should be the id of the point which is the\nparent. If no points has a matching id, or this option is undefined, then the parent will be set to the root.",
+                    "type": "string"
+                },
+                "q1": {
+                    "description": "The lower quartile for each data point. This is the bottom of the box.",
+                    "type": "number"
+                },
+                "q3": {
+                    "description": "The higher quartile for each data point. This is the top of the box.",
+                    "type": "number"
+                },
+                "radius": {
+                    "description": "The outer radius of an individual point in a solid gauge. Can be given as a number (pixels) or percentage string.",
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                },
+                "selected": {
+                    "default": false,
+                    "description": "Whether the data point is selected initially.",
+                    "type": "boolean"
+                },
+                "sliced": {
+                    "default": false,
+                    "description": "Whether to display a slice offset from the center.",
+                    "type": "boolean"
+                },
+                "value": {
+                    "description": "The value of the point, resulting in a relative area of the point in the treemap.",
+                    "type": "number"
+                },
+                "x": {
+                    "description": "The x value of the point. For datetime axes, the X value is the timestamp in milliseconds since 1970.",
+                    "type": "number"
+                },
+                "y": {
+                    "description": "The y value of the point.",
+                    "type": "number"
+                },
+                "z": {
+                    "description": "The size value for each bubble. The bubbles' diameters are computed based on the z, and controlled by series\noptions like minSize, maxSize, sizeBy, zMin and zMax.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.DateTimeFormats": {
+            "properties": {
+                "day": {
+                    "default": "'%e. %b'",
+                    "type": "string"
+                },
+                "hour": {
+                    "default": "'%H:%M'",
+                    "type": "string"
+                },
+                "millisecond": {
+                    "default": "'%H:%M:%S.%L'",
+                    "type": "string"
+                },
+                "minute": {
+                    "default": "'%H:%M'",
+                    "type": "string"
+                },
+                "month": {
+                    "default": "'%b \\ '%y'",
+                    "type": "string"
+                },
+                "second": {
+                    "default": "'%H:%M:%S'",
+                    "type": "string"
+                },
+                "week": {
+                    "default": "'%e. %b'",
+                    "type": "string"
+                },
+                "year": {
+                    "default": "'%Y'",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.Gradient": {
+            "properties": {
+                "brighten": {
+                    "description": "Brighten the color",
+                    "type": "object"
+                },
+                "get": {
+                    "description": "Return the color a specified format",
+                    "type": "object"
+                },
+                "linearGradient": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.LinearGradient"
+                        },
+                        {
+                            "items": {
+                                "type": "number"
+                            },
+                            "type": "array"
+                        }
+                    ]
+                },
+                "radialGradient": {
+                    "properties": {
+                        "cx": {
+                            "type": "number"
+                        },
+                        "cy": {
+                            "type": "number"
+                        },
+                        "r": {
+                            "type": "number"
+                        }
+                    },
+                    "type": "object"
+                },
+                "raw": {
+                    "description": "The raw input",
+                    "type": "string"
+                },
+                "rgba": {
+                    "description": "rgba array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                },
+                "setOpacity": {
+                    "description": "Set the color's opacity to a given alpha value",
+                    "type": "object"
+                },
+                "stops": {
+                    "items": {
+                        "items": {
+                        },
+                        "type": "array"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.Halo": {
+            "properties": {
+                "attributes": {
+                    "description": "A collection of SVG attributes to override the appearance of the halo, for example fill, stroke and stroke-width.",
+                    "properties": {
+                    },
+                    "type": "object"
+                },
+                "opacity": {
+                    "default": 0.25,
+                    "description": "Opacity for the halo unless a specific fill is overridden using the attributes setting. Note that Highcharts is\nonly able to apply opacity to colors of hex or rgb(a) formats.",
+                    "type": "number"
+                },
+                "size": {
+                    "description": "The pixel size of the halo. For point markers this is the radius of the halo. For pie slices it is the width of\nthe halo outside the slice. For bubbles it defaults to 5 and is the width of the halo outside the bubble.\nDefaults to 10.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.LineStates": {
+            "properties": {
+                "animation": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Animation"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "default": {
+                        "duration": 50
+                    },
+                    "description": "Animation setting for hovering the graph in line-type series."
+                },
+                "enabled": {
+                    "default": true,
+                    "description": "Enable separate styles for the hovered series to visualize that the user hovers either the series itself or the\nlegend.",
+                    "type": "boolean"
+                },
+                "halo": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Halo"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "description": "Options for the halo appearing around the hovered point in line-type series as well as outside the hovered slice\nin pie charts. By default the halo is filled by the current point or series color with an opacity of 0.25. The\nhalo can be disabled by setting the halo option to false."
+                },
+                "lineWidth": {
+                    "default": 2,
+                    "description": "Pixel with of the graph line.",
+                    "type": "number"
+                },
+                "lineWidthPlus": {
+                    "default": 1,
+                    "description": "The additional line width for the graph of a hovered series.",
+                    "type": "number"
+                },
+                "marker": {
+                    "$ref": "#/definitions/Highcharts.Marker"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.LinearGradient": {
+            "properties": {
+                "x1": {
+                    "type": "number"
+                },
+                "x2": {
+                    "type": "number"
+                },
+                "y1": {
+                    "type": "number"
+                },
+                "y2": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.Marker": {
+            "properties": {
+                "enabled": {
+                    "default": "null, true for hover and select",
+                    "description": "Enable or disable the point marker. If null, the markers are hidden when the data is dense, and shown for more\nwidespread data points.",
+                    "type": "boolean"
+                },
+                "fillColor": {
+                    "description": "The fill color of the point marker. When null, the series' or point's color is used.",
+                    "type": "string"
+                },
+                "height": {
+                    "default": null,
+                    "description": "Image markers only. Set the image width explicitly. When using this option, a width must also be set.",
+                    "type": "number"
+                },
+                "lineColor": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "default": "'#FFFFFF', '#000000' for select state",
+                    "description": "The color of the point marker's outline. When null, the series' or point's color is used."
+                },
+                "lineWidth": {
+                    "default": 0,
+                    "description": "The width of the point marker's outline.",
+                    "type": "number"
+                },
+                "radius": {
+                    "default": "4, undefined for hover and select",
+                    "description": "The radius of the point marker.",
+                    "type": "number"
+                },
+                "states": {
+                    "properties": {
+                        "hover": {
+                            "$ref": "#/definitions/Highcharts.MarkerHoverState"
+                        },
+                        "select": {
+                            "$ref": "#/definitions/Highcharts.MarkerState",
+                            "description": "The appearance of the point marker when selected. In order to allow a point to be selected, set the\nseries.allowPointSelect option to true."
+                        }
+                    },
+                    "type": "object"
+                },
+                "symbol": {
+                    "description": "A predefined shape or symbol for the marker. When null, the symbol is pulled from options.symbols. Other possible\nvalues are 'circle', 'square', 'diamond', 'triangle' and 'triangle-down'.\n\nAdditionally, the URL to a graphic can be given on this form: 'url(graphic.png)'. Note that for the image to be\napplied to exported charts, its URL needs to be accessible by the export server.\n\nCustom callbacks for symbol path generation can also be added to Highcharts.SVGRenderer.prototype.symbols. The\ncallback is then used by its method name.",
+                    "type": "string"
+                },
+                "width": {
+                    "default": "null.",
+                    "description": "Image markers only. Set the image width explicitly. When using this option, a height must also be set.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.MarkerHoverState": {
+            "properties": {
+                "enabled": {
+                    "default": "null, true for hover and select",
+                    "description": "Enable or disable the point marker. If null, the markers are hidden when the data is dense, and shown for more\nwidespread data points.",
+                    "type": "boolean"
+                },
+                "fillColor": {
+                    "description": "The fill color of the point marker. When null, the series' or point's color is used.",
+                    "type": "string"
+                },
+                "lineColor": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "default": "'#FFFFFF', '#000000' for select state",
+                    "description": "The color of the point marker's outline. When null, the series' or point's color is used."
+                },
+                "lineWidth": {
+                    "default": 0,
+                    "description": "The width of the point marker's outline.",
+                    "type": "number"
+                },
+                "lineWidthPlus": {
+                    "default": 1,
+                    "description": "The additional line width for a hovered point.",
+                    "type": "number"
+                },
+                "radius": {
+                    "default": "4, undefined for hover and select",
+                    "description": "The radius of the point marker.",
+                    "type": "number"
+                },
+                "radiusPlus": {
+                    "default": 2,
+                    "description": "The number of pixels to increase the radius of the hovered point.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.MarkerState": {
+            "properties": {
+                "enabled": {
+                    "default": "null, true for hover and select",
+                    "description": "Enable or disable the point marker. If null, the markers are hidden when the data is dense, and shown for more\nwidespread data points.",
+                    "type": "boolean"
+                },
+                "fillColor": {
+                    "description": "The fill color of the point marker. When null, the series' or point's color is used.",
+                    "type": "string"
+                },
+                "lineColor": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "default": "'#FFFFFF', '#000000' for select state",
+                    "description": "The color of the point marker's outline. When null, the series' or point's color is used."
+                },
+                "lineWidth": {
+                    "default": 0,
+                    "description": "The width of the point marker's outline.",
+                    "type": "number"
+                },
+                "radius": {
+                    "default": "4, undefined for hover and select",
+                    "description": "The radius of the point marker.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.PlotEvents": {
+            "properties": {
+                "afterAnimate": {
+                    "description": "Fires after the series has finished its initial animation, or in case animation is disabled, immediately as the\nseries is displayed.\n\nThe this keyword refers to the Series object.",
+                    "type": "object"
+                },
+                "checkboxClick": {
+                    "description": "Fires when the checkbox next to the series' name in the legend is clicked. One parameter, event, is passed to the\nfunction. The state of the checkbox is found by event.checked. The checked item is found by event.item. Return\nfalse to prevent the default action which is to toggle the select state of the series.\n\nThe this keyword refers to the Series object.",
+                    "type": "object"
+                },
+                "click": {
+                    "description": "Fires when the series is clicked. One parameter, event, is passed to the function. This contains common event\ninformation based on jQuery or MooTools depending on which library is used as the base for Highcharts.\nAdditionally, event.point holds a pointer to the nearest point on the graph.\n\nThe this keyword refers to the Series object.",
+                    "type": "object"
+                },
+                "hide": {
+                    "description": "Fires when the series is hidden after chart generation time, either by clicking the legend item or by calling\n.hide().\n\nThe this keyword refers to the Series object.",
+                    "type": "object"
+                },
+                "legendItemClick": {
+                    "description": "Fires when the legend item belonging to the series is clicked. One parameter, event, is passed to the function.\nThis contains common event information based on jQuery or MooTools depending on which library is used as the base\nfor Highcharts. The default action is to toggle the visibility of the series. This can be prevented by returning\nfalse or calling event.preventDefault().\n\nThe this keyword refers to the Series object.",
+                    "type": "object"
+                },
+                "mouseOut": {
+                    "description": "Fires when the mouse leaves the graph. One parameter, event, is passed to the function. This contains common\nevent information based on jQuery or MooTools depending on which library is used as the base for Highcharts. If\nthe stickyTracking option is true, mouseOut doesn't happen before the mouse enters another graph or leaves the\nplot area.\n\nThe this keyword refers to the Series object.",
+                    "type": "object"
+                },
+                "mouseOver": {
+                    "description": "Fires when the mouse enters the graph. One parameter, event, is passed to the function. This contains common\nevent information based on jQuery or MooTools depending on which library is used as the base for Highcharts.\n\nThe this keyword refers to the Series object.",
+                    "type": "object"
+                },
+                "show": {
+                    "description": "Fires when the series is shown after chart generation time, either by clicking the legend item or by calling\n.show().\n\nThe this keyword refers to the Series object.",
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.PointEvents": {
+            "properties": {
+                "click": {
+                    "description": "Fires when a point is clicked. One parameter, event, is passed to the function. This contains common event\ninformation based on jQuery or MooTools depending on which library is used as the base for Highcharts.\n\nIf the series.allowPointSelect option is true, the default action for the point's click event is to toggle the\npoint's select state. Returning false cancels this action.\n\nThe this keyword refers to the Point object.",
+                    "type": "object"
+                },
+                "legendItemClick": {
+                    "description": "Fires when the legend item belonging to the pie point (slice) is clicked.\nThe this keyword refers to the point itself. One parameter, event, is passed to the function.\nThis contains common event information based on jQuery or MooTools depending on which library is used as the base for Highcharts.\nThe default action is to toggle the visibility of the point. This can be prevented by calling event.preventDefault().",
+                    "type": "object"
+                },
+                "mouseOut": {
+                    "description": "Fires when the mouse leaves the area close to the point. One parameter, event, is passed to the function. This\ncontains common event information based on jQuery or MooTools depending on which library is used as the base for\nHighcharts.\n\nThe this keyword refers to the Point object.",
+                    "type": "object"
+                },
+                "mouseOver": {
+                    "description": "Fires when the mouse enters the area close to the point. One parameter, event, is passed to the function. This\ncontains common event information based on jQuery or MooTools depending on which library is used as the base for\nHighcharts.\n\nThe this keyword refers to the Point object.",
+                    "type": "object"
+                },
+                "remove": {
+                    "description": "Fires when the point is removed using the .remove() method. One parameter, event, is passed to the function.\nReturning false cancels the operation.\n\nThe this keyword refers to the Point object.",
+                    "type": "object"
+                },
+                "select": {
+                    "description": "Fires when the point is selected either programmatically or following a click on the point. One parameter, event,\nis passed to the function. Returning false cancels the operation.\n\nThe this keyword refers to the Point object.",
+                    "type": "object"
+                },
+                "unselect": {
+                    "description": "Fires when the point is unselected either programmatically or following a click on the point. One parameter,\nevent, is passed to the function. Returning false cancels the operation.\n\nThe this keyword refers to the Point object.",
+                    "type": "object"
+                },
+                "update": {
+                    "description": "Fires when the point is updated programmatically through the .update() method. One parameter, event, is passed to\nthe function. The new point options can be accessed through event.options. Returning false cancels the operation.\n\nThe this keyword refers to the Point object.",
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.SeriesTooltipOptions": {
+            "properties": {
+                "dateTimeLabelFormats": {
+                    "$ref": "#/definitions/Highcharts.DateTimeFormats",
+                    "description": "For series on a datetime axes, the date format in the tooltip's header will by default be guessed based on the\nclosest data points. This member gives the default string representations used for each unit."
+                },
+                "followPointer": {
+                    "default": false,
+                    "description": "Whether the tooltip should follow the mouse as it moves across columns, pie slices and other point types with an\nextent. By default it behaves this way for scatter, bubble and pie series by override in the plotOptions for\nthose series types.\n\nFor touch moves to behave the same way, followTouchMove must be true also.",
+                    "type": "boolean"
+                },
+                "followTouchMove": {
+                    "default": true,
+                    "description": "Whether the tooltip should follow the finger as it moves on a touch device. If chart.zoomType is set, it will\noverride followTouchMove.",
+                    "type": "boolean"
+                },
+                "footerFormat": {
+                    "default": "'false'",
+                    "description": "A string to append to the tooltip format.",
+                    "type": "string"
+                },
+                "headerFormat": {
+                    "default": "'<span style='font-size: 10px'>{point.key}</span><br/>'",
+                    "description": "The HTML of the tooltip header line. Variables are enclosed by curly brackets. Available variables are point.key,\nseries.name, series.color and other members from the point and series objects. The point.key variable contains\nthe category name, x value or datetime string depending on the type of axis. For datetime axes, the point.key\ndate format can be set using tooltip.xDateFormat.",
+                    "type": "string"
+                },
+                "hideDelay": {
+                    "default": 500,
+                    "description": "The number of milliseconds to wait until the tooltip is hidden when mouse out from a point or chart.",
+                    "type": "number"
+                },
+                "pointFormat": {
+                    "default": "'<span style='color:{point.color}'>\\u25CF</span> {series.name}: <b>{point.y}</b><br/>'",
+                    "description": "The HTML of the point's line in the tooltip. Variables are enclosed by curly brackets. Available variables are\npoint.x, point.y, series.name and series.color and other properties on the same form. Furthermore, point.y can be\nextended by the tooltip.valuePrefix and tooltip.valueSuffix variables. This can also be overridden for each\nseries, which makes it a good hook for displaying units.",
+                    "type": "string"
+                },
+                "pointFormatter": {
+                    "description": "A callback function for formatting the HTML output for a single point in the tooltip. Like the pointFormat\nstring, but with more flexibility.\n\nThe this keyword refers to the Point object.",
+                    "type": "object"
+                },
+                "valueDecimals": {
+                    "description": "How many decimals to show in each series' y value. This is overridable in each series' tooltip options object.\nThe default is to preserve all decimals.",
+                    "type": "number"
+                },
+                "valuePrefix": {
+                    "description": "A string to prepend to each series' y value. Overridable in each series' tooltip options object.",
+                    "type": "string"
+                },
+                "valueSuffix": {
+                    "description": "A string to append to each series' y value. Overridable in each series' tooltip options object.",
+                    "type": "string"
+                },
+                "xDateFormat": {
+                    "description": "The format for the date in the tooltip header if the X axis is a datetime axis. The default is a best guess based\non the smallest distance between points in the chart.",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Highcharts.Shadow": {
+            "properties": {
+                "color": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "default": "'black'"
+                },
+                "offsetX": {
+                    "default": 1,
+                    "type": "number"
+                },
+                "offsetY": {
+                    "default": 1,
+                    "type": "number"
+                },
+                "opacity": {
+                    "default": "0.15 / width",
+                    "type": "number"
+                },
+                "width": {
+                    "default": 3,
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
         "MySeriesOptions": {
             "properties": {
+                "allowPointSelect": {
+                    "default": false,
+                    "description": "Allow this series' points to be selected by clicking on the markers, bars or pie slices.",
+                    "type": "boolean"
+                },
+                "animation": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Animation"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "default": true,
+                    "description": "Enable or disable the initial animation when a series is displayed. The animation can also be set as a\nconfiguration object. Please note that this option only applies to the initial animation of the series itself.\nFor other animations, see chart.animation and the animation parameter under the API methods."
+                },
+                "className": {
+                    "description": "A class name to apply to the series' graphical elements.",
+                    "type": "string"
+                },
+                "color": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Gradient"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "description": "The main color or the series. In line type series it applies to the line and the point markers unless otherwise\n     specified. In bar type series it applies to the bars unless a color is specified per point. The default\n     value is pulled from the options.colors array."
+                },
+                "colorIndex": {
+                    "description": "Styled mode only. A specific color index to use for the point, so its graphic representations are given the class name highcharts-color-{n}.",
+                    "type": "number"
+                },
+                "connectEnds": {
+                    "default": true,
+                    "description": "Polar charts only. Whether to connect the ends of a line series plot across the extremes.",
+                    "type": "boolean"
+                },
+                "connectNulls": {
+                    "default": false,
+                    "description": "Whether to connect a graph line across null points.",
+                    "type": "boolean"
+                },
+                "crisp": {
+                    "default": true,
+                    "description": "When true, each column edge is rounded to its nearest pixel in order to render sharp on screen.\nIn some cases, when there are a lot of densely packed columns, this leads to visible difference\nin column widths or distance between columns. In these cases, setting crisp to false may look\nbetter, even though each column is rendered blurry.",
+                    "type": "boolean"
+                },
+                "cropThreshold": {
+                    "default": 300,
+                    "description": "When the series contains less points than the crop threshold, all points are drawn, event if the points fall\noutside the visible plot area at the current zoom. The advantage of drawing all points (including markers and\ncolumns), is that animation is performed on updates. On the other hand, when the series contains more points than\nthe crop threshold, the series data is cropped to only contain points that fall within the plot area. The\nadvantage of cropping away invisible points is to increase performance on large series.",
+                    "type": "number"
+                },
+                "cursor": {
+                    "description": "You can set the cursor to \"pointer\" if you have click events attached to the series, to signal to the user\n     that the points and lines can be clicked.",
+                    "type": "string"
+                },
+                "dashStyle": {
+                    "default": "'Solid'",
+                    "description": "A name for the dash style to use for the graph. Applies only to series type having a graph, like line, spline,\narea and scatter in case it has a lineWidth. The value for the dashStyle include:\n- Solid\n- ShortDash\n- ShortDot\n- ShortDashDot\n- ShortDashDotDot\n- Dot\n- Dash\n- LongDash\n- DashDot\n- LongDashDot\n- LongDashDotDot",
+                    "type": "string"
+                },
+                "data": {
+                    "description": "An array of data points for the series. For the area series type, points can be given in the following ways:\n\n1. An array of numerical values. In this case, the numerical values will be interpreted as y options. The x\n    values will be automatically calculated, either starting at 0 and incremented by 1, or from pointStart and\n    pointInterval given in the series options. If the axis has categories, these will be used. Example:\n        data: [0, 5, 3, 5]\n\n2. An array of arrays with 2 values. In this case, the values correspond to x,y. If the first value is a string,\n    it is applied as the name of the point, and the x value is inferred.\n        data: [\n            [0, 9],\n            [1, 7],\n            [2, 6]\n        ]\n\n3. An array of objects with named values. The objects are point configuration objects as seen below. If the total\n    number of data points exceeds the series' turboThreshold, this option is not available.\n        data: [{\n            x: 1,\n            y: 9,\n            name: 'Point2',\n            color: '#00FF00'\n        }, {\n            x: 1,\n            y: 6,\n            name: 'Point1',\n            color: '#FF00FF'\n        }]",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/Highcharts.DataPoint"
+                            },
+                            {
+                                "additionalItems": {
+                                    "anyOf": [
+                                        {
+                                            "type": "number"
+                                        },
+                                        {
+                                            "type": "number"
+                                        }
+                                    ]
+                                },
+                                "items": [
+                                    {
+                                        "type": "number"
+                                    },
+                                    {
+                                        "type": "number"
+                                    }
+                                ],
+                                "minItems": 2,
+                                "type": "array"
+                            },
+                            {
+                                "additionalItems": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "number"
+                                        }
+                                    ]
+                                },
+                                "items": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "number"
+                                    }
+                                ],
+                                "minItems": 2,
+                                "type": "array"
+                            },
+                            {
+                                "type": "number"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "dataLabels": {
+                    "$ref": "#/definitions/Highcharts.DataLabels"
+                },
+                "description": {
+                    "default": "undefined",
+                    "description": "A description of the series to add to the screen reader information about the series.",
+                    "type": "string"
+                },
+                "enableMouseTracking": {
+                    "default": true,
+                    "description": "Enable or disable the mouse tracking for a specific series. This includes point tooltips and click events on\ngraphs and points. For large datasets it improves performance.",
+                    "type": "boolean"
+                },
+                "events": {
+                    "$ref": "#/definitions/Highcharts.PlotEvents"
+                },
+                "findNearestPointBy": {
+                    "description": "Determines whether the series should look for the nearest point in both dimensions or just the x-dimension when\nhovering the series. Defaults to 'xy' for scatter series and 'x' for most other series. If the data has duplicate\nx-values, it is recommended to set this to 'xy' to allow hovering over all points.\n\nApplies only to series types using nearest neighbor search (not direct hover) for tooltip.",
+                    "type": "string"
+                },
+                "getExtremesFromAll": {
+                    "default": false,
+                    "description": "Whether to use the Y extremes of the total chart width or only the zoomed area when zooming in on parts of the X\naxis. By default, the Y axis adjusts to the min and max of the visible data. Cartesian series only.",
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "An id for the series. This can be used after render time to get a pointer to the series object through\nchart.get().",
+                    "type": "string"
+                },
+                "index": {
+                    "description": "The index of the series in the chart, affecting the internal index in the chart.series array, the visible Z index\nas well as the order in the legend.",
+                    "type": "number"
+                },
+                "innerSize": {
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                },
+                "keys": {
+                    "description": "An array specifying which option maps to which key in the data point array. This makes it convenient to work with\nunstructured data arrays from different sources.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "legendIndex": {
+                    "description": "The sequential index of the series in the legend.",
+                    "type": "number"
+                },
+                "lineWidth": {
+                    "default": 2,
+                    "description": "Pixel with of the graph line.",
+                    "type": "number"
+                },
+                "linecap": {
+                    "default": "'round'",
+                    "description": "The line cap used for line ends and line joins on the graph.",
+                    "type": "string"
+                },
+                "linkedTo": {
+                    "description": "The id of another series to link to. Additionally, the value can be ':previous' to link to the previous series.\nWhen two series are linked, only the first one appears in the legend. Toggling the visibility of this also\ntoggles the linked series.",
+                    "type": "string"
+                },
+                "marker": {
+                    "$ref": "#/definitions/Highcharts.Marker"
+                },
+                "name": {
+                    "description": "The name of the series as shown in the legend, tooltip etc.",
+                    "type": "string"
+                },
+                "negativeColor": {
+                    "default": "null.",
+                    "description": "The color for the parts of the graph or points that are below the threshold.",
+                    "type": "string"
+                },
+                "point": {
+                    "properties": {
+                        "events": {
+                            "$ref": "#/definitions/Highcharts.PointEvents"
+                        }
+                    },
+                    "type": "object"
+                },
+                "pointInterval": {
+                    "default": 1,
+                    "description": "If no x values are given for the points in a series, pointInterval defines the interval of the x values. For\nexample, if a series contains one value every decade starting from year 0, set pointInterval to 10.\n\nSince Highcharts 4.1, it can be combined with pointIntervalUnit to draw irregular intervals.",
+                    "type": "number"
+                },
+                "pointIntervalUnit": {
+                    "description": "On datetime series, this allows for setting the pointInterval to the two irregular time units, month and year.\nCombine it with pointInterval to draw quarters, 6 months, 10 years etc.",
+                    "type": "string"
+                },
+                "pointPlacement": {
+                    "description": "Possible values: null, 'on', 'between'.\n\nIn a column chart, when pointPlacement is 'on', the point will not create any padding of the X axis. In a polar\ncolumn chart this means that the first column points directly north. If the pointPlacement is 'between', the\ncolumns will be laid out between ticks. This is useful for example for visualising an amount between two points\nin time or in a certain sector of a polar chart.\n\nSince Highcharts 3.0.2, the point placement can also be numeric, where 0 is on the axis value, -0.5 is between\nthis value and the previous, and 0.5 is between this value and the next. Unlike the textual options, numeric\npoint placement options won't affect axis padding.\n\nNote that pointPlacement needs a pointRange to work. For column series this is computed, but for line-type series\nit needs to be set.\n\nDefaults to null in cartesian charts, 'between' in polar charts.",
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                },
+                "pointStart": {
+                    "default": 0,
+                    "description": "If no x values are given for the points in a series, pointStart defines on what value to start. For example, if a\nseries contains one yearly value starting from 1945, set pointStart to 1945.",
+                    "type": "number"
+                },
+                "pointWidth": {
+                    "description": "A pixel value specifying a fixed width for each column or bar. When null, the width is calculated from\nthe pointPadding and groupPadding.",
+                    "type": "number"
+                },
+                "selected": {
+                    "default": false,
+                    "description": "Whether to select the series initially. If showCheckbox is true, the checkbox next to the series name will be\nchecked for a selected series.",
+                    "type": "boolean"
+                },
+                "shadow": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Highcharts.Shadow"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "default": false,
+                    "description": "Whether to apply a drop shadow to the graph line. Since 2.3 the shadow can be an object configuration containing\ncolor, offsetX, offsetY, opacity and width."
+                },
+                "showCheckbox": {
+                    "default": false,
+                    "description": "If true, a checkbox is displayed next to the legend item to allow selecting the series. The state of the checkbox\nis determined by the selected option.",
+                    "type": "boolean"
+                },
+                "showInLegend": {
+                    "description": "Whether to display this particular series or series type in the legend. The default value is true for standalone\nseries, false for linked series. Defaults to true.",
+                    "type": "boolean"
+                },
+                "size": {
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                },
+                "softThreshold": {
+                    "default": true,
+                    "description": "When this is true, the series will not cause the Y axis to cross the zero plane (or threshold option) unless the\ndata actually crosses the plane.\n\nFor example, if softThreshold is false, a series of 0, 1, 2, 3 will make the Y axis show negative values\naccording to the minPadding option. If softThreshold is true, the Y axis starts at 0.",
+                    "type": "boolean"
+                },
                 "source": {
                     "type": "string"
                 },
                 "sourceRef": {
                     "type": "string"
+                },
+                "stack": {
+                    "description": "This option allows grouping series in a stacked chart. The stack option can be a string or a number or anything\nelse, as long as the grouped series' stack options match each other."
+                },
+                "stacking": {
+                    "description": "Whether to stack the values of each series on top of each other. Possible values are null to disable, 'normal' to\nstack by value or 'percent'.",
+                    "type": "string"
+                },
+                "states": {
+                    "description": "A wrapper object for all the series options in specific states.",
+                    "properties": {
+                        "hover": {
+                            "$ref": "#/definitions/Highcharts.LineStates",
+                            "description": "Options for the hovered series"
+                        }
+                    },
+                    "type": "object"
+                },
+                "stickyTracking": {
+                    "default": true,
+                    "description": "Sticky tracking of mouse events. When true, the mouseOut event on a series isn't triggered until the mouse moves\nover another series, or out of the plot area. When false, the mouseOut event on a series is triggered when the\nmouse leaves the area around the series' graph or markers. This also implies the tooltip. When stickyTracking is\nfalse and tooltip.shared is false, the tooltip will be hidden when moving the mouse between series. Defaults to\ntrue for line and area type series, but to false for columns, pies etc.",
+                    "type": "boolean"
+                },
+                "threshold": {
+                    "default": 0,
+                    "description": "The Y axis value to serve as the base for the area, for distinguishing between values above and below a\nthreshold. If null, the area behaves like a line series with fill between the graph and the Y axis minimum.",
+                    "type": "number"
+                },
+                "tooltip": {
+                    "$ref": "#/definitions/Highcharts.SeriesTooltipOptions",
+                    "description": "A configuration object for the tooltip rendering of each single series. Properties are inherited from tooltip,\nbut only the following properties can be defined on a series level."
+                },
+                "turboThreshold": {
+                    "default": 1000,
+                    "description": "When a series contains a data array that is longer than this, only one dimensional arrays of numbers, or two\ndimensional arrays with x and y values are allowed. Also, only the first point is tested, and the rest are\nassumed to be the same format. This saves expensive data checking and indexing in long series. Set it to 0\ndisable.",
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "The series' visibility state as set by series.show(), series.hide(), or the initial configuration.",
+                    "type": "boolean"
+                },
+                "xAxis": {
+                    "default": 0,
+                    "description": "When using dual or multiple x axes, this number defines which xAxis the particular series is connected to. It\nrefers to either the axis id or the index of the axis in the xAxis array, with 0 being the first.",
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                },
+                "yAxis": {
+                    "default": 0,
+                    "description": "When using dual or multiple x axes, this number defines which xAxis the particular series is connected to. It\nrefers to either the axis id or the index of the axis in the xAxis array, with 0 being the first.",
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                },
+                "zIndex": {
+                    "description": "Define the visual z index of the series.",
+                    "type": "number"
+                },
+                "zoneAxis": {
+                    "default": "'y'",
+                    "description": "Defines the Axis on which the zones are applied.",
+                    "type": "string"
+                },
+                "zones": {
+                    "description": "An array defining zones within a series. Zones can be applied to the X axis, Y axis or Z axis for bubbles,\naccording to the zoneAxis option.",
+                    "items": {
+                        "$ref": "#/definitions/Highcharts.AreaZone"
+                    },
+                    "type": "array"
                 }
             },
             "type": "object"
@@ -62,6 +1290,5 @@
     "patternProperties": {
         "^(Config|config)$": { "$ref": "#/definitions/Config" }
     }
-
 }
 
