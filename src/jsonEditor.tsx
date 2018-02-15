@@ -66,8 +66,6 @@ export class JsonEditor extends React.Component<Props, State> {
         // https://github.com/Microsoft/monaco-editor/issues/191
         // var model = monaco.editor.createModel(jsonCode, 'json', 'internal://server/foo.json');
         // monaco.editor.create(document.getElementById("container"), { model: model });
-        // tslint:disable-next-line:no-console
-        // console.log('schema?', schema);
         // const tmpSchema = {
         //     // 'title': 'Test schema',
         //     '$schema': 'http://json-schema.org/draft-04/schema#',
@@ -85,6 +83,11 @@ export class JsonEditor extends React.Component<Props, State> {
         //                     'description': '',
         //                     'type': 'number',
         //                     'default': 1
+        //                 },
+        //                 'url': {
+        //                     'description': '',
+        //                     'type': 'string',
+        //                     'pattern': '^((//|https?://).+|)$'
         //                 }
         //             }
         //         },
@@ -93,22 +96,11 @@ export class JsonEditor extends React.Component<Props, State> {
         //             'description': 'Some other description',
       
         //             'properties': {
-        //                 'url': {
-        //                     'description': '',
-        //                     'type': 'string',
-        //                     'pattern': '^((//|https?://).+|)$'
-        //                 },
-        //                 'prefetch': {
-        //                     'type': 'boolean',
-        //                     'default': true
-        //                 }
         //             }
         //         }
         //     },
         //     'patternProperties': {
         //         '^anObject$': { '$ref': '#/definitions/anObject' },
-        //         '^anobject$': { '$ref': '#/definitions/anObject' },
-        //         '^(another|Another)$': { '$ref': '#/definitions/another' }
         //     }
         // };
         editor.languages.json.jsonDefaults.setDiagnosticsOptions({

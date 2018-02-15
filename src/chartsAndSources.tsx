@@ -162,7 +162,7 @@ export class ChartsAndSources extends React.Component<object, State> {
               transforms: [{ class: 'Integral' }]
             },
             {
-              sourceRef: 'CMDB::FirstSyncs', name: 'Started',
+              sourceRef: 'FirstSyncs', name: 'Started',
               transforms: [{ class: 'Integral' }]
             }
           ]
