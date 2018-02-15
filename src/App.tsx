@@ -39,7 +39,7 @@ class App extends React.Component<object, State> {
               // className={classnames({ active: this.state.activeTab === '2' })}
               onClick={() => { this.toggle('2'); }}
             >
-              Moar Tabs
+              More Tabs
             </NavLink>
           </NavItem>
         </Nav>
