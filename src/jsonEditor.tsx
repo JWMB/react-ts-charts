@@ -18,10 +18,18 @@ export class JsonEditor extends React.Component<Props, State> {
     }
     render() {
         const code = this.state.text;
-        const options: monaco.editor.IEditorOptions = {
+
+         // TODO: can we create model here so we don't have to deal with the extra "$schema" in editor contents?
+        // https://github.com/Microsoft/monaco-editor/issues/191
+        // var model = monaco.editor.createModel(jsonCode, 'json', 'internal://server/foo.json');
+        // monaco.editor.create(document.getElementById("container"), { model: model });
+
+        const options: monaco.editor.IEditorConstructionOptions = {
             selectOnLineNumbers: true,
-            parameterHints: true  
+            parameterHints: true,
+            model: undefined
         };
+
         const requireConfig = {
           url: 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.1/require.min.js',
           paths: {
@@ -62,47 +70,6 @@ export class JsonEditor extends React.Component<Props, State> {
     }
     // tslint:disable-next-line:no-any
     private handleMonacoWillMount = (editor: typeof monaco) => {
-        // editor.languages.json.jsonDefaults.onDidChange
-        // https://github.com/Microsoft/monaco-editor/issues/191
-        // var model = monaco.editor.createModel(jsonCode, 'json', 'internal://server/foo.json');
-        // monaco.editor.create(document.getElementById("container"), { model: model });
-        // const tmpSchema = {
-        //     // 'title': 'Test schema',
-        //     '$schema': 'http://json-schema.org/draft-04/schema#',
-        //     // 'type': 'object',
-        //     'definitions': {
-        //         'anObject': {
-        //             'type': 'object',
-        //             'description': 'Settings',
-        //             'properties': {
-        //                 'aBoolean': {
-        //                     'description': '',
-        //                     'type': 'boolean'
-        //                 },
-        //                 'aNumber': {
-        //                     'description': '',
-        //                     'type': 'number',
-        //                     'default': 1
-        //                 },
-        //                 'url': {
-        //                     'description': '',
-        //                     'type': 'string',
-        //                     'pattern': '^((//|https?://).+|)$'
-        //                 }
-        //             }
-        //         },
-        //         'another': {
-        //             'type': 'object',
-        //             'description': 'Some other description',
-      
-        //             'properties': {
-        //             }
-        //         }
-        //     },
-        //     'patternProperties': {
-        //         '^anObject$': { '$ref': '#/definitions/anObject' },
-        //     }
-        // };
         editor.languages.json.jsonDefaults.setDiagnosticsOptions({
             validate: true,
             allowComments: true,

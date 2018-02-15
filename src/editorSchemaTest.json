@@ -1,0 +1,37 @@
+{
+    "title": "Test schema",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "definitions": {
+        "anObject": {
+            "type": "object",
+            "description": "Settings",
+            "properties": {
+                "aBoolean": {
+                    "description": "",
+                    "type": "boolean"
+                },
+                "aNumber": {
+                    "description": "",
+                    "type": "number",
+                    "default": 1
+                },
+                "url": {
+                    "description": "",
+                    "type": "string",
+                    "pattern": "^((//|https?://).+|)$"
+                }
+            }
+        },
+        "another": {
+            "type": "object",
+            "description": "Some other description",
+
+            "properties": {
+            }
+        }
+    },
+    "patternProperties": {
+        "^anObject$": { "$ref": "#/definitions/anObject" }
+    }
+}
