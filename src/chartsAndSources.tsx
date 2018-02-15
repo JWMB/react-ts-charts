@@ -5,6 +5,7 @@ import { Collapse } from 'react-collapse';
 import { JsonEditor } from './jsonEditor';
 import * as stringify from 'json-stringify-pretty-compact';
 import { Button } from 'reactstrap';
+import * as chartConfig from './assets/cm.chartsource.json';
 
 type ChartDef = ChartConfig;
 type Config = {
@@ -24,167 +25,12 @@ export class ChartsAndSources extends React.Component<object, State> {
   componentWillMount() {
     // https://www.esrl.noaa.gov/psd/enso/mei/table.html
     // http://www.remss.com/research/climate/
-    // const config = {
-    //   sources: [
-    //     {
-    //       name: 'BEST',
-    //       url: 'http://localhost:55734/api/corscheat/?url='
-    //         + encodeURIComponent('http://berkeleyearth.lbl.gov/auto/Global/Complete_TAVG_complete.txt'),
-    //       xColumn: { name: 'year', type: 'datetime' },
-    //       parser: 'BerkeleyBEST'
-    //     },
-    //     {
-    //       name: 'SeaLevel',
-    //       url: 'http://localhost:55734/api/corscheat/?url='
-    //         + encodeURIComponent('http://sealevel.colorado.edu/files/2016_rel4/sl_ns_global.txt'),
-    //       xColumn: { name: 'year', type: 'datetime' },
-    //     },
-    //     {
-    //       name: 'Temp',
-    //       url: 'http://localhost:55734/api/corscheat/?url='
-    //         //  'C:\\Users\\jonas\\Documents\\GraphPlay\\graphplayorg\\data\\NASA_GSMTMonthly2015.txt'),
-    //         + encodeURIComponent('https://data.giss.nasa.gov/gistemp/tabledata_v3/GLB.Ts+dSST.txt'),
-    //       xColumn: { name: 'year', type: 'datetime' },
-    //       parser: 'MonthAsColumn'
-    //     },
-    //   ],
-    //   charts: [
-    //     {
-    //       title: { text: 'Climate data' },
-    //       yAxis: [{
-    //         title: { text: 'Temp. anomaly NASA GIS', style: { color: 'colors[0]' } },
-    //         labels: { format: '{value}°C', style: { color: 'colors[0]' } }
-    //     }, {
-    //         gridLineWidth: 0,
-    //         title: { text: 'Temp. anomaly BEST', style: { color: 'colors[1]' } },
-    //         labels: { format: '{value}°C', style: { color: 'colors[1]' } },
-    //         opposite: true
-    //     }, {
-    //       gridLineWidth: 0,
-    //       title: { text: 'Sea level', style: { color: 'colors[2]' } },
-    //       labels: { format: '{value} mm', style: { color: 'colors[2]' } },
-    //       opposite: true
-    //     }],
-    //       series: [
-    //         {
-    //           sourceRef: 'Temp::Value', name: 'NASA GIS', lineWidth: 1, shadow: true,
-    //           transforms: [
-    //             { class: 'UserCode', code: 'value / 100' },
-    //             { class: 'MovingAverage', windowLength: 10 }
-    //           ]
-    //         },
-    //         {
-    //           sourceRef: 'BEST::Value', name: 'BEST', lineWidth: 1, shadow: true, yAxis: 1,
-    //           transforms: [
-    //             { class: 'FilterByX', ranges: [['1880-01-01', '2020-01-01']], includeWhenInRange: true },
-    //             // { class: 'UserCode', code: 'value * 50' },
-    //             { class: 'MovingAverage', windowLength: 10 }
-    //           ]
-    //         },
-    //         {
-    //           sourceRef: 'SeaLevel::msl_ib_ns(mm)', name: 'Sea level', lineWidth: 1, shadow: true, yAxis: 2,
-    //           transforms: [
-    //             { class: 'MovingAverage', windowLength: 10 }
-    //           ]
 
-    //         }
-
-    //       ]
-    //     }
-    //   ]
-    // };
-
-    const config = {
-      sources: [
-        {
-          name: 'CMDB',
-          url: 'http://localhost:55734/api/azure/cache',
-          xColumn: { name: 'Date', type: 'datetime' },
-          series: [
-            {
-              column: 'Syncs_onlySchools=true',
-              transforms: []
-            }
-          ]
-        }
-      ],
-      charts: [
-        {
-          title: 'Syncs',
-          defaultSource: 'CMDB',
-          yAxis: {
-            title: {
-              text: 'Number of accounts'
-            }
-          },
-          series: [
-            {
-              sourceRef: 'Syncs_onlySchools=true', name: 'Daily school syncs avg', color: '#ffccaa',
-              transforms: [{ class: 'MovingAverage', windowLength: 10 }]
-            },
-            { sourceRef: 'Syncs_onlySchools=true', name: 'Daily school syncs' },
-            { sourceRef: 'Syncs_onlySchools=false', name: 'Daily total syncs' },
-            { sourceRef: 'UniqueSyncsPerWeek', name: 'Weekly unique syncs', lineWidth: 0 },
-            {
-              sourceRef: 'UniqueSyncsPerWeek', name: 'Weekly unique syncs, exl holidays', lineWidth: 0,
-              transforms: [{
-                class: 'FilterByX', ranges: [
-                  ['??-03-23', '??-04-15'], ['??-06-01', '??-09-15'],
-                  ['??-10-20', '??-11-02'], ['??-12-15', '??-01-15']]
-              }]
-            },
-            {
-              sourceRef: 'UniqueSyncsPerWeek', name: 'Weekly unique syncs exl trend',
-                transforms: [{
-                  class: 'FilterByX', ranges: [
-                    ['??-03-23', '??-04-15'], ['??-06-01', '??-09-15'],
-                    ['??-10-20', '??-11-02'], ['??-12-15', '??-01-15']]
-                },
-              { class: 'LinearRegression' }]
-            }
-          ]
-        },
-        {
-          title: 'Accumulated created/started accounts',
-          defaultSource: 'CMDB',
-          yAxis: {
-            title: {
-              text: 'Number of accounts'
-            }
-          },
-          series: [
-            {
-              sourceRef: 'NewTrainingAccounts_parents=true', name: 'Created (parents)',
-              transforms: [{ class: 'Integral' }]
-            },
-            {
-              sourceRef: 'NewTrainingAccounts_parents=false', name: 'Created (total)',
-              transforms: [{ class: 'Integral' }]
-            },
-            {
-              sourceRef: 'FirstSyncs', name: 'Started',
-              transforms: [{ class: 'Integral' }]
-            }
-          ]
-        },
-        {
-          title: 'Created/started accounts',
-          yAxis: {
-            title: {
-              text: 'Number of accounts'
-            }
-          },
-          series: [
-            { sourceRef: 'CMDB::NewTrainingAccounts_parents=true', name: 'Created (parents)' },
-            { sourceRef: 'CMDB::NewTrainingAccounts_parents=false', name: 'Created (total)' },
-            { sourceRef: 'CMDB::FirstSyncs', name: 'Started' }
-          ]
-        }
-      ] as ChartDef[]
-    };
+    // // tslint:disable-next-line:no-any
+    // (window as any).temp1 = JSON.stringify(config);
 
     // TODO: PR to json-stringify-pretty-compact ?
-    let configAsString = stringify(config, { maxLength: 80, indent: 2 });
+    let configAsString = stringify(chartConfig, { maxLength: 80, indent: 2 });
     const rxEmptyBracketLine = /(\n\s*)({)(\s*\n\s*)/g;
     while (true) {
       const matches = rxEmptyBracketLine.exec(configAsString);

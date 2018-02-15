@@ -1,0 +1,139 @@
+{
+    "sources": [
+      {
+        "name": "BEST",
+        "url": "http://localhost:55734/api/corscheat/?url=http%3A%2F%2Fberkeleyearth.lbl.gov%2Fauto%2FGlobal%2FComplete_TAVG_complete.txt",
+        "xColumn": {
+          "name": "year",
+          "type": "datetime"
+        },
+        "parser": "BerkeleyBEST"
+      },
+      {
+        "name": "SeaLevel",
+        "url": "http://localhost:55734/api/corscheat/?url=http%3A%2F%2Fsealevel.colorado.edu%2Ffiles%2F2016_rel4%2Fsl_ns_global.txt",
+        "xColumn": {
+          "name": "year",
+          "type": "datetime"
+        }
+      },
+      {
+        "name": "Temp",
+        "url": "http://localhost:55734/api/corscheat/?url=https%3A%2F%2Fdata.giss.nasa.gov%2Fgistemp%2Ftabledata_v3%2FGLB.Ts%2BdSST.txt",
+        "xColumn": {
+          "name": "year",
+          "type": "datetime"
+        },
+        "parser": "MonthAsColumn"
+      }
+    ],
+    "charts": [
+      {
+        "title": {
+          "text": "Climate data"
+        },
+        "yAxis": [
+          {
+            "title": {
+              "text": "Temp. anomaly NASA GIS",
+              "style": {
+                "color": "colors[0]"
+              }
+            },
+            "labels": {
+              "format": "{value}°C",
+              "style": {
+                "color": "colors[0]"
+              }
+            }
+          },
+          {
+            "gridLineWidth": 0,
+            "title": {
+              "text": "Temp. anomaly BEST",
+              "style": {
+                "color": "colors[1]"
+              }
+            },
+            "labels": {
+              "format": "{value}°C",
+              "style": {
+                "color": "colors[1]"
+              }
+            },
+            "opposite": true
+          },
+          {
+            "gridLineWidth": 0,
+            "title": {
+              "text": "Sea level",
+              "style": {
+                "color": "colors[2]"
+              }
+            },
+            "labels": {
+              "format": "{value} mm",
+              "style": {
+                "color": "colors[2]"
+              }
+            },
+            "opposite": true
+          }
+        ],
+        "series": [
+          {
+            "sourceRef": "Temp::Value",
+            "name": "NASA GIS",
+            "lineWidth": 1,
+            "shadow": true, 
+            "transforms": [
+              {
+                "class": "UserCode",
+                "code": "value / 100"
+              },
+              {
+                "class": "MovingAverage",
+                "windowLength": 10
+              }
+            ]
+          },
+          {
+            "sourceRef": "BEST::Value",
+            "name": "BEST",
+            "lineWidth": 1,
+            "shadow": true,
+            "yAxis": 1,
+            "transforms": [
+              {
+                "class": "FilterByX",
+                "ranges": [
+                  [
+                    "1880-01-01",
+                    "2020-01-01"
+                  ]
+                ],
+                "includeWhenInRange": true
+              },
+              {
+                "class": "MovingAverage",
+                "windowLength": 10
+              }
+            ]
+          },
+          {
+            "sourceRef": "SeaLevel::msl_ib_ns(mm)",
+            "name": "Sea level",
+            "lineWidth": 1,
+            "shadow": true,
+            "yAxis": 2,
+            "transforms": [
+              {
+                "class": "MovingAverage",
+                "windowLength": 10
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
