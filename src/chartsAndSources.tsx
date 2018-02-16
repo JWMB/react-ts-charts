@@ -3,9 +3,10 @@ import { Chart, ChartConfig, MySeriesOptions } from './chart';
 import { DataSource } from './dataSource';
 import { Collapse } from 'react-collapse';
 import { JsonEditor } from './jsonEditor';
-import * as stringify from 'json-stringify-pretty-compact';
 import { Button } from 'reactstrap';
 import * as chartConfig from './assets/climate.chartsource.json';
+import { stringify2 } from './stringify2';
+import * as editorSchema from './editorSchema.json';
 
 type ChartDef = ChartConfig;
 type Config = {
@@ -16,8 +17,7 @@ type Config = {
 type State = {
   sources: DataSource[],
   charts: ChartDef[],
-  // tslint:disable-next-line:no-any
-  configDef: any,
+  configDef: string,
   configDefIsOpen: boolean,
 };
 
@@ -26,32 +26,15 @@ export class ChartsAndSources extends React.Component<object, State> {
     // https://www.esrl.noaa.gov/psd/enso/mei/table.html
     // http://www.remss.com/research/climate/
 
-    // // tslint:disable-next-line:no-any
-    // (window as any).temp1 = JSON.stringify(config);
-
-    // TODO: PR to json-stringify-pretty-compact ?
-    let configAsString = stringify(chartConfig, { maxLength: 80, indent: 2 });
-    const rxEmptyBracketLine = /(\n\s*)({)(\s*\n\s*)/g;
-    while (true) {
-      const matches = rxEmptyBracketLine.exec(configAsString);
-      if (!matches || !matches.length) {
-        break;
-      }
-      if (matches.length === 4) {
-        const index = matches.slice(1, 2).map(m => m.length).reduce((p, c) => p + c);
-        configAsString = configAsString.substr(0, matches.index + index) + '{ '
-          + configAsString.substr(matches.index + matches[0].length);
-      }
-    }
+    let configAsString = stringify2(chartConfig, { maxLength: 80, indent: 2 });
     this.setState({
       configDef: configAsString,
-      // configDef: JSON.stringify(config, null, ' '), // .replace(/\n/g, '<br>'),
-      configDefIsOpen: false, // chartsDefWarnings: '',
+      configDefIsOpen: false,
       sources: []
     });
   }
   componentDidMount() {
-    this.handleSubmitChartsDef(this.state.configDef);
+    this.handleSubmitChartsDef(this.state.configDef); // JSON.parse(
   }
 
   render() {
@@ -73,17 +56,17 @@ export class ChartsAndSources extends React.Component<object, State> {
       })
         .filter((c: ChartConfig) => c.series && c.series.length)
         .map((c: ChartConfig) => (
-          <li key={c.title}>
+          <div key={c.title}>
             <Chart config={c} />
-          </li>
+          </div>
         ));
     }
     if (!listItems.length) {
       listItems =
         [(
-          <li key="0">
+          <div key="0">
             loading...
-          </li>
+          </div>
         )];
     }
 
@@ -95,12 +78,12 @@ export class ChartsAndSources extends React.Component<object, State> {
             {this.state.configDefIsOpen ? 'close' : 'open'}
           </Button>
           <Collapse isOpened={this.state.configDefIsOpen}>
-            <JsonEditor onSubmit={this.handleSubmitChartsDef} data={this.state.configDef} />
+            <JsonEditor onSubmit={this.handleSubmitChartsDef} data={this.state.configDef} schema={editorSchema} />
           </Collapse>
         </div>
-        <ul>
+        <div>
           {listItems}
-        </ul>
+        </div>
       </div>
     );
   }
@@ -110,9 +93,8 @@ export class ChartsAndSources extends React.Component<object, State> {
     this.setState(ps => ({ configDefIsOpen: !ps.configDefIsOpen }));
   }
 
-  private handleSubmitChartsDef = (data: string) => {
-    const dataObj = JSON.parse(data);
-    this.submitConfigDef(dataObj as Config);
+  private handleSubmitChartsDef = (data: string) => { // Object | Array<Object>
+    this.submitConfigDef(JSON.parse(data) as Config);
     // try {
     //   const dataObj = JSON.parse(this.state.chartsDef);
     //   this.submitChartsDef(dataObj as ChartsDef[]);
@@ -153,9 +135,11 @@ export class ChartsAndSources extends React.Component<object, State> {
     let sources = this.state.sources.concat(newSources);
     this.setState({ sources: sources });
     const promises = newSources.map(s => s.load());
-    Promise.all(promises).then(vals => {
-      this.setState({ charts: config.charts });
-    },                         err => alert('' + err));
+    Promise.all(promises).then(
+      vals => {
+        this.setState({ charts: config.charts });
+      },
+      err => alert('' + err));
   }    
 
 }

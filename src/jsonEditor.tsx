@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Button } from 'reactstrap';
 import MonacoEditor from 'react-monaco-editor';
-import * as schema from './editorSchema.json';
 
 type Props = {
     data: string;
-    onSubmit: (value: string) => void;
+    schema?: Object | undefined;
+    onSubmit: (value: string) => void; // Object | Array<Object>
 };
 type State = {
     text: string;
@@ -13,7 +13,9 @@ type State = {
 };
 export class JsonEditor extends React.Component<Props, State> {
     componentWillMount() {
-        const code = '{\n  "$schema": "mySchema",\n  "config": ' + this.props.data + '\n}';
+        const code = this.props.schema
+            ? '{\n  "$schema": "mySchema",\n  "config": ' + this.props.data + '\n}'
+            : this.props.data;
         this.setState({ text: code, warnings: '' }); // this.props.data
     }
     render() {
@@ -70,16 +72,18 @@ export class JsonEditor extends React.Component<Props, State> {
     }
     // tslint:disable-next-line:no-any
     private handleMonacoWillMount = (editor: typeof monaco) => {
-        editor.languages.json.jsonDefaults.setDiagnosticsOptions({
-            validate: true,
-            allowComments: true,
-            schemas: [
-                {
-                    uri: 'mySchema', // http://myserver/foo-schema.json
-                    schema: schema
-                }
-            ]
-        });
+        if (this.props.schema) {
+            editor.languages.json.jsonDefaults.setDiagnosticsOptions({
+                validate: true,
+                allowComments: true,
+                schemas: [
+                    {
+                        uri: 'mySchema', // http://myserver/foo-schema.json
+                        schema: this.props.schema
+                    }
+                ]
+            });
+        }    
     }
     private handleSubmit = () => {
         if (!this.validate()) {
@@ -87,6 +91,7 @@ export class JsonEditor extends React.Component<Props, State> {
         }
         if (this.props.onSubmit) {
             const parsed = JSON.parse(this.state.text);
+            // this.props.onSubmit(parsed.config ? JSON.stringify(parsed.config) : parsed);
             if (parsed.config) {
                 this.props.onSubmit(JSON.stringify(parsed.config));
             } else {
