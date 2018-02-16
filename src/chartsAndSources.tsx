@@ -5,7 +5,7 @@ import { Collapse } from 'react-collapse';
 import { JsonEditor } from './jsonEditor';
 import * as stringify from 'json-stringify-pretty-compact';
 import { Button } from 'reactstrap';
-import * as chartConfig from './assets/cm.chartsource.json';
+import * as chartConfig from './assets/climate.chartsource.json';
 
 type ChartDef = ChartConfig;
 type Config = {
@@ -86,18 +86,6 @@ export class ChartsAndSources extends React.Component<object, State> {
           </li>
         )];
     }
-    // const listItems = this.state.charts ? 
-    //   return (
-    //     <li key={item.title}>
-    //       <Chart config={copy}/>
-    //     </li>
-    //   );
-    // }) :
-    //   [(
-    //     <li key="0">
-    //     loading...
-    //     </li>
-    //   )];
 
     return (
       <div>

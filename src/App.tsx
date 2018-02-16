@@ -2,6 +2,7 @@ import * as React from 'react';
 import './App.css';
 import { ChartsAndSources } from './chartsAndSources';
 import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col, Card, CardTitle, CardText, Button } from 'reactstrap';
+import { DryRun } from './dryrun';
 
 type State = {
   activeTab: string;
@@ -9,6 +10,7 @@ type State = {
 
 class App extends React.Component<object, State> {
   componentWillMount() {
+    DryRun.tests();
     this.setState({ activeTab: '1' });
   }
   toggle(tab: string) {

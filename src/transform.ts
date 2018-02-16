@@ -1,4 +1,4 @@
-import { MyDate, DateRange } from './dateRange';
+import { SimpleDate, DateRange } from './dateRange';
 
 export interface TransformSettings {
     class?: string;
@@ -70,7 +70,7 @@ export class FilterByX extends Transform {
     ranges: [string, string][];
     includeWhenInRange: boolean = false;
     execute(data: DataType[]): DataType[] {
-        const parsedRanges = this.ranges.map(r => r.map(d => MyDate.parse(d))) as [MyDate, MyDate][];
+        const parsedRanges = this.ranges.map(r => r.map(d => SimpleDate.parse(d))) as [SimpleDate, SimpleDate][];
         const fIsInRange = DateRange.createMultiGetIsInRangeFunction(parsedRanges);
         const result: DataType[] = [];
         for (var i = 0; i < data.length; i++) {
