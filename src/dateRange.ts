@@ -17,6 +17,13 @@ export class SimpleDate {
     }
 }
 export class DateFormat {
+    static getDateParserCanThrow(format: string | undefined) {
+        const p = DateFormat.getDateParser(format);
+        if (!p) {
+            throw new Error('Couldn\'t parse format: ' + format);
+        }
+        return p;
+    }
     static getDateParser(format: string | undefined) {
         if (!format) {
             return undefined;

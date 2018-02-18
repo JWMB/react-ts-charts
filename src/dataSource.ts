@@ -5,6 +5,7 @@ import { MonthAsColumnParser } from './sourceParsers/monthAsColumnParser';
 import { BerkeleyBESTParser } from './sourceParsers/berkeleyBESTParser';
 import { CSVParser } from './sourceParsers/CSVParser';
 import { DateFormat } from './dateRange';
+import { SMHIMinMaxParser } from './sourceParsers/SMHIMinMaxParser';
 
 export type DataSeries = {
     name: string,
@@ -41,6 +42,9 @@ export class DataSource {
                             break;
                         case 'BerkeleyBEST':
                             parser = new BerkeleyBESTParser();
+                            break;
+                        case 'SMHIMinMax':
+                            parser = new SMHIMinMaxParser();
                             break;
                         default:
                             parser = new CSVParser();

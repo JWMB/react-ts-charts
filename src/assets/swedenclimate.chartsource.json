@@ -1,0 +1,46 @@
+{
+    "sources": [
+      {
+        "name": "STHLM",
+        "url": "http://localhost:55734/api/corscheat/?url=C%3A%5CUsers%5Cjonas%5CDownloads%5Csmhi-opendata_19_20_98160_20180218_082052.csv",
+        "xColumn": {
+          "name": "year",
+          "type": "datetime"
+        },
+        "parser": "SMHIMinMax"
+      }
+    ],
+    "charts": [
+      {
+        "title": {
+          "text": "Climate data"
+        },
+        "yAxis": [
+          {
+            "title": {
+              "text": "Temp. anomaly NASA GIS",
+              "style": {
+                "color": "colors[0]"
+              }
+            },
+            "labels": {
+              "format": "{value}°C",
+              "style": {
+                "color": "colors[0]"
+              }
+            }
+          }
+        ],
+        "series": [
+          {
+            "sourceRef": "STHLM::Value",
+            "name": "STHLM max",
+            "lineWidth": 1,
+            "shadow": true, 
+            "transforms": [
+            ]
+          }
+        ]
+      }
+    ]
+  }
