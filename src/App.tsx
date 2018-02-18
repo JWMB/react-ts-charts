@@ -10,13 +10,13 @@ import { stringify2 } from './stringify2';
 
 type State = {
   activeTab: string;
-  configDef: Object;
+  configDef: string;
 };
 
 class App extends React.Component<object, State> {
   componentWillMount() {
     DryRun.tests();
-    this.setState({ activeTab: '1', configDef: chartConfig });
+    this.setState({ activeTab: '1', configDef: stringify2(chartConfig, { maxLength: 80, indent: 2 }) });
   }
   toggle(tab: string) {
     if (this.state.activeTab !== tab) {
@@ -52,12 +52,12 @@ class App extends React.Component<object, State> {
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="1">
-            <ChartsAndSources />
+            <ChartsAndSources configDef={this.state.configDef} />
           </TabPane>
           <TabPane tabId="2">
             <JsonEditor
               onSubmit={this.handleSubmitChartsDef}
-              data={stringify2(this.state.configDef, { maxLength: 80, indent: 2 })}
+              data={this.state.configDef}
             />
           </TabPane>
         </TabContent>
@@ -66,7 +66,8 @@ class App extends React.Component<object, State> {
   }
   private handleSubmitChartsDef = (data: string) => { // Object | Array<Object>
     // tslint:disable-next-line:no-console
-    console.log('data', data);
+    // console.log('data', data);
+    this.setState({ configDef: data, activeTab: '1' });
   }
   // <Row>
   //   <Col sm="6">

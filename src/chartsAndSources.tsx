@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Chart, ChartConfig, MySeriesOptions } from './chart';
 import { DataSource } from './dataSource';
-import { Collapse } from 'react-collapse';
-import { JsonEditor } from './jsonEditor';
-import { Button } from 'reactstrap';
-import * as chartConfig from './assets/climate.chartsource.json';
-import { stringify2 } from './stringify2';
-import * as editorSchema from './editorSchema.json';
+// import { Collapse } from 'react-collapse';
+// import { JsonEditor } from './jsonEditor';
+// import { Button } from 'reactstrap';
+// import * as chartConfig from './assets/climate.chartsource.json';
+// import { stringify2 } from './stringify2';
+// import * as editorSchema from './editorSchema.json';
 
 type ChartDef = ChartConfig;
 type Config = {
@@ -14,27 +14,37 @@ type Config = {
   charts: ChartDef[]
 };
 
+type Props = {
+  configDef: string
+};
+
 type State = {
   sources: DataSource[],
   charts: ChartDef[],
-  configDef: string,
-  configDefIsOpen: boolean,
+  // configDef: string,
+  // configDefIsOpen: boolean,
 };
 
-export class ChartsAndSources extends React.Component<object, State> {
+export class ChartsAndSources extends React.Component<Props, State> {
   componentWillMount() {
     // https://www.esrl.noaa.gov/psd/enso/mei/table.html
     // http://www.remss.com/research/climate/
 
-    let configAsString = stringify2(chartConfig, { maxLength: 80, indent: 2 });
+    // let configAsString = stringify2(chartConfig, { maxLength: 80, indent: 2 });
     this.setState({
-      configDef: configAsString,
-      configDefIsOpen: false,
+      // configDef: configAsString,
+      // configDefIsOpen: false,
       sources: []
     });
   }
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.configDef !== this.props.configDef) {
+      this.handleSubmitChartsDef(nextProps.configDef);
+    }
+  }
   componentDidMount() {
-    this.handleSubmitChartsDef(this.state.configDef); // JSON.parse(
+    this.handleSubmitChartsDef(this.props.configDef);
+    // this.handleSubmitChartsDef(this.state.configDef); // JSON.parse(
   }
 
   render() {
@@ -74,12 +84,12 @@ export class ChartsAndSources extends React.Component<object, State> {
       <div>
         <div>
           <div>Sources/charts definition</div>
-          <Button onClick={this.handleToggleClick}>
+          {/* <Button onClick={this.handleToggleClick}>
             {this.state.configDefIsOpen ? 'close' : 'open'}
           </Button>
           <Collapse isOpened={this.state.configDefIsOpen}>
             <JsonEditor onSubmit={this.handleSubmitChartsDef} data={this.state.configDef} schema={editorSchema} />
-          </Collapse>
+          </Collapse> */}
         </div>
         <div>
           {listItems}
@@ -88,10 +98,10 @@ export class ChartsAndSources extends React.Component<object, State> {
     );
   }
 
-  private handleToggleClick = () => this.toggleChartsDef();
-  private toggleChartsDef() {
-    this.setState(ps => ({ configDefIsOpen: !ps.configDefIsOpen }));
-  }
+  // private handleToggleClick = () => this.toggleChartsDef();
+  // private toggleChartsDef() {
+  //   this.setState(ps => ({ configDefIsOpen: !ps.configDefIsOpen }));
+  // }
 
   private handleSubmitChartsDef = (data: string) => { // Object | Array<Object>
     this.submitConfigDef(JSON.parse(data) as Config);

@@ -12,11 +12,17 @@ type State = {
     warnings: string;
 };
 export class JsonEditor extends React.Component<Props, State> {
+    private reactEditor: MonacoEditor | null;
     componentWillMount() {
         const code = this.props.schema
             ? '{\n  "$schema": "mySchema",\n  "config": ' + this.props.data + '\n}'
             : this.props.data;
         this.setState({ text: code, warnings: '' }); // this.props.data
+    }
+    componentDidUpdate() {
+        if (this.reactEditor && this.reactEditor.editor) {
+            this.reactEditor.editor.layout();
+        }
     }
     render() {
         const code = this.state.text;
@@ -41,6 +47,7 @@ export class JsonEditor extends React.Component<Props, State> {
         return (
             <div>
                 <MonacoEditor
+                    ref={(editor) => this.reactEditor = editor}    
                     width="800"
                     height="600"
                     language="json"
