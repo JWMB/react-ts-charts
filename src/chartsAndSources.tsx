@@ -83,8 +83,8 @@ export class ChartsAndSources extends React.Component<Props, State> {
     return (
       <div>
         <div>
-          <div>Sources/charts definition</div>
-          {/* <Button onClick={this.handleToggleClick}>
+          {/*<div>Sources/charts definition</div>
+           <Button onClick={this.handleToggleClick}>
             {this.state.configDefIsOpen ? 'close' : 'open'}
           </Button>
           <Collapse isOpened={this.state.configDefIsOpen}>

@@ -6,7 +6,8 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import { DryRun } from './dryrun';
 import { JsonEditor } from './jsonEditor';
 // import * as chartConfig from './assets/climate.chartsource.json';
-import * as chartConfig from './assets/swedenclimate.chartsource.json';
+// import * as chartConfig from './assets/swedenclimate.chartsource.json';
+import * as chartConfig from './assets/cm.chartsource.json';
 import { stringify2 } from './stringify2';
 
 type State = {

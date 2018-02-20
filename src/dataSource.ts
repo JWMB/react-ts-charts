@@ -6,6 +6,7 @@ import { BerkeleyBESTParser } from './sourceParsers/berkeleyBESTParser';
 import { CSVParser } from './sourceParsers/CSVParser';
 import { DateFormat } from './dateRange';
 import { SMHIMinMaxParser } from './sourceParsers/SMHIMinMaxParser';
+import { EnvHelper } from './envHelper';
 
 export type DataSeries = {
     name: string,
@@ -23,7 +24,7 @@ export class DataSource {
     description: string;
     url: string;
     xColumn: { name: string, type: 'datetime' | 'time' | 'number' };
-    series: { column: string, transforms: TransformSettings[] }[];
+    series: { name: string, transforms: TransformSettings[] }[];
     dataSeries: DataSeries[];
     parser: string;
 
@@ -31,7 +32,7 @@ export class DataSource {
     
     load() {
         this.dataSeries = [];
-        const url = this.url;
+        const url = EnvHelper.replaceInString(this.url);
         return new Promise<void>((res, rej) => {
             axios.get(<string> url).then(
                 axResult => {
@@ -67,11 +68,7 @@ export class DataSource {
                     if (this.series) {
                         // TODO: just for testing, no design yet for multiplexing / demultiplexing
                         this.series.forEach(s => {
-                            // tslint:disable-next-line:no-any
-                            if ((<any>s).muxDemux) {
-                                const added = this.demuxByYear(this.dataSeries[1], this.dataSeries[0]);
-                                this.dataSeries = this.dataSeries.concat(added);
-                            }
+                            this.muxDemux(s);
                          });
                     }
                     res();
@@ -83,6 +80,39 @@ export class DataSource {
         });
     }
 
+    // tslint:disable-next-line:no-any
+    muxDemux(s: { name: string, transforms: any[]}) {
+        // tslint:disable-next-line:no-any
+        const muxDemux = <any[]>(<any>s).muxDemux;
+        if (muxDemux) {
+            muxDemux.forEach(x => {
+                let added: DataSeries[] = [];
+                if (x.class === 'demux') {
+                    added = this.demuxByYear(this.dataSeries[1], this.dataSeries[0]);
+                } else if (x.class === 'join') {
+                    const inputNames: string[] = x.inputs;
+                    const inputs = this.dataSeries.filter(ds => inputNames.indexOf(ds.name) >= 0);
+                    if (inputs.length !== inputNames.length) {
+                        // tslint:disable-next-line:no-console
+                        console.log('series not found...', inputNames, this.dataSeries.map(ds => ds.name));
+                    }
+                    added = this.joinSeries(inputs);
+                    added[0].name = s.name;
+                }
+                this.dataSeries = this.dataSeries.concat(added);
+            });
+        }
+    }
+    joinSeries(valueSeries: DataSeries[]) {
+        const added = <DataSeries>{  name: 'joined', data: <number[]>[], format: 'number'};
+        const len = Math.max.apply(null, valueSeries.map(s => s.data.length));
+        for (let i = 0; i < len; i++) {
+            let val = valueSeries.map(s => parseFloat(<string>s.data[i]))
+                .reduce((p, c) => p + (c || 0));
+            added.data.push(val);
+        }
+        return [added];
+    }
     demuxByYear(valueSeries: DataSeries, dateSeries: DataSeries) {
         // TODO: so bad... corrupts original dateSeries
         const yearArray = Array.from(Array(366)).map(_ => null);

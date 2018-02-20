@@ -2,7 +2,7 @@
     "sources": [
       {
         "name": "STHLM",
-        "url": "http://localhost:55734/api/corscheat/?url=C%3A%5CUsers%5Cjonas%5CDownloads%5Csmhi-opendata_19_20_98160_20180218_082052.csv",
+        "url": "{process.env.REACT_APP_DEFAULT_DATA_API}/corscheat/?url=C%3A%5CUsers%5Cjonas%5CDownloads%5Csmhi-opendata_19_20_98160_20180218_082052.csv",
         "xColumn": {
           "name": "year",
           "type": "datetime"

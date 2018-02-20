@@ -2,15 +2,16 @@
     "sources": [
       {
         "name": "CMDB",
-        "url": "http://localhost:55734/api/azure/cache",
+        "url": "{process.env.REACT_APP_DEFAULT_DATA_API}/azure/cache",
         "xColumn": {
           "name": "Date",
           "type": "datetime"
         },
         "series": [
           {
-            "column": "Syncs_onlySchools=true",
-            "transforms": []
+            "name": "NewTrainingAccounts_total",
+            "muxDemux": [ { "class": "join",
+              "inputs": ["NewTrainingAccounts_parents=true", "NewTrainingAccounts_parents=false"]}]
           }
         ]
       }
@@ -27,22 +28,11 @@
         "series": [
           {
             "sourceRef": "Syncs_onlySchools=true",
-            "name": "Daily school syncs avg",
-            "color": "#ffccaa",
-            "transforms": [
-              {
-                "class": "MovingAverage",
-                "windowLength": 10
-              }
-            ]
-          },
-          {
-            "sourceRef": "Syncs_onlySchools=true",
             "name": "Daily school syncs"
           },
           {
             "sourceRef": "Syncs_onlySchools=false",
-            "name": "Daily total syncs"
+            "name": "Daily parent syncs"
           },
           {
             "sourceRef": "UniqueSyncsPerWeek",
@@ -72,6 +62,10 @@
                   [
                     "??-12-15",
                     "??-01-15"
+                  ],
+                  [
+                    "??-02-12",
+                    "??-03-01"
                   ]
                 ]
               }
@@ -99,6 +93,10 @@
                   [
                     "??-12-15",
                     "??-01-15"
+                  ],
+                  [
+                    "??-02-12",
+                    "??-03-01"
                   ]
                 ]
               },
@@ -129,6 +127,15 @@
           },
           {
             "sourceRef": "NewTrainingAccounts_parents=false",
+            "name": "Created (schools)",
+            "transforms": [
+              {
+                "class": "Integral"
+              }
+            ]
+          },
+          {
+            "sourceRef": "NewTrainingAccounts_total",
             "name": "Created (total)",
             "transforms": [
               {
@@ -161,7 +168,7 @@
           },
           {
             "sourceRef": "CMDB::NewTrainingAccounts_parents=false",
-            "name": "Created (total)"
+            "name": "Created (schools)"
           },
           {
             "sourceRef": "CMDB::FirstSyncs",
