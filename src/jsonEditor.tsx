@@ -16,14 +16,26 @@ type State = {
 export class JsonEditor extends React.Component<Props, State> {
     private reactEditor: MonacoEditor | null;
     componentWillMount() {
-        const code = this.props.schema
-            ? '{\n  "$schema": "mySchema",\n  "config": ' + this.props.data + '\n}'
-            : this.props.data;
-        this.setState({ text: code, warnings: '' }); // this.props.data
+        this.setState({ text: this.getCodeFromProps(this.props), warnings: '' });
     }
     componentDidUpdate() {
+        // // tslint:disable-next-line:no-console
+        // console.log('componentDidUpdate', !!this.reactEditor);
         if (this.reactEditor && this.reactEditor.editor) {
             this.reactEditor.editor.layout();
+        }
+    }
+    getCodeFromProps(props: Props): string {
+        return props.schema
+            ? '{\n  "$schema": "mySchema",\n  "config": ' + props.data + '\n}'
+            : props.data;
+    }
+    componentWillReceiveProps(nextProps: Props) {
+        const code = this.getCodeFromProps(nextProps);
+        // // tslint:disable-next-line:no-console
+        // console.log('componentWillReceiveProps - changed?', code !== this.state.text, code.substr(0, 200));
+        if (code !== this.state.text) {
+            this.setState({ text: code, warnings: '' });
         }
     }
     render() {
@@ -44,6 +56,8 @@ export class JsonEditor extends React.Component<Props, State> {
           url: 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.1/require.min.js',
           paths: {
             'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.10.1/min/vs/'
+            // 'vs': '../node_modules/monaco-editor/min/vs/'
+  
           }
         };
         return (

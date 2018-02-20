@@ -9,6 +9,8 @@ import { JsonEditor } from './jsonEditor';
 // import * as chartConfig from './assets/climate.chartsource.json';
 // import * as chartConfig from './assets/swedenclimate.chartsource.json';
 import * as chartConfig from './assets/cm.chartsource.json';
+import * as chartSchema from './editorSchema.json';
+
 import { stringify2 } from './stringify2';
 import { ChartDefinitionStore } from './chartDefinitionStore';
 
@@ -18,6 +20,8 @@ import { ChartDefinitionStore } from './chartDefinitionStore';
 type State = {
   activeTab: string;
   configDef: string;
+  currentConfigKey: string;
+  currentConfigUnsaved: boolean;
   dropdownOpen?: boolean;
 };
 
@@ -25,14 +29,21 @@ class App extends React.Component<object, State> {
   componentWillMount() {
     DryRun.tests();
 
+    let currentConfigKey = 'default';
     let defaultConfig = '{}';
     if (ChartDefinitionStore.keys.length === 0) {
       defaultConfig = stringify2(chartConfig, { maxLength: 80, indent: 2 });
-      ChartDefinitionStore.set('default', defaultConfig);
+      ChartDefinitionStore.set(currentConfigKey, defaultConfig);
     } else {
-      defaultConfig = ChartDefinitionStore.get('default') as string;
+      currentConfigKey = ChartDefinitionStore.keys[0];
+      defaultConfig = ChartDefinitionStore.get(currentConfigKey) as string;
     }
-    this.setState({ activeTab: '1', configDef: defaultConfig });
+    this.setState({
+      activeTab: '1',
+      configDef: defaultConfig,
+      currentConfigKey: currentConfigKey,
+      currentConfigUnsaved: false
+    });
   }
   toggle(tab: string) {
     if (this.state.activeTab !== tab) {
@@ -48,9 +59,14 @@ class App extends React.Component<object, State> {
     } else {
       const def = ChartDefinitionStore.get(key);
       if (def) {
-        this.setState({ configDef: def });
+        this.setState({ configDef: def, currentConfigKey: key, currentConfigUnsaved: false });
       }
     }
+  }
+  saveDefinition(key?: string) {
+    key = key || this.state.currentConfigKey;
+    ChartDefinitionStore.set(key, this.state.configDef);
+    this.setState({ currentConfigUnsaved: false });
   }
   render() {
     const storedKeys = ChartDefinitionStore.keys;
@@ -60,7 +76,14 @@ class App extends React.Component<object, State> {
     //  };
     const storedDefinitions = storedKeys.map(k => (
       <div key={k} >
-        <span onClick={() => { this.loadDefinition(k); }}>{k}</span>
+        <span
+          onClick={() => { this.loadDefinition(k); }}
+          style={({ fontWeight: this.state.currentConfigKey === k ? 'bold' : 'normal' })}
+        >
+          {k}
+        </span>
+        {(this.state.currentConfigKey === k && this.state.currentConfigUnsaved) ?
+          (<span onClick={() => this.saveDefinition()}>&nbsp;Save</span>) : (<span/>)}
         {/* {Math.random() < 0.5 ? (<span>Save</span>) : (<span/>)} */}
       </div>
     ));
@@ -132,6 +155,7 @@ class App extends React.Component<object, State> {
             <JsonEditor
               onSubmit={this.handleSubmitChartsDef}
               data={this.state.configDef}
+              schema={chartSchema}
             />
           </TabPane>
         </TabContent>
@@ -139,7 +163,7 @@ class App extends React.Component<object, State> {
     );
   }
   private handleSubmitChartsDef = (data: string) => { // Object | Array<Object>
-    this.setState({ configDef: data, activeTab: '1' });
+    this.setState({ configDef: data, activeTab: '1', currentConfigUnsaved: data !== this.state.configDef });
   }
   // <Row>
   //   <Col sm="6">
