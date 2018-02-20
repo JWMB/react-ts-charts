@@ -64,6 +64,16 @@ export class DataSource {
                     
                         }
                     }
+                    if (this.series) {
+                        // TODO: just for testing, no design yet for multiplexing / demultiplexing
+                        this.series.forEach(s => {
+                            // tslint:disable-next-line:no-any
+                            if ((<any>s).muxDemux) {
+                                const added = this.demuxByYear(this.dataSeries[1], this.dataSeries[0]);
+                                this.dataSeries = this.dataSeries.concat(added);
+                            }
+                         });
+                    }
                     res();
                 },
                 err => {
@@ -71,5 +81,37 @@ export class DataSource {
                 }
             ).then(() => this.loadedSignal.dispatch(this.dataSeries.length > 0));
         });
+    }
+
+    demuxByYear(valueSeries: DataSeries, dateSeries: DataSeries) {
+        // TODO: so bad... corrupts original dateSeries
+        const yearArray = Array.from(Array(366)).map(_ => null);
+        const split = new Map<number, (number | null)[]>();
+        valueSeries.data.forEach((v, i) => {
+            const a = dateSeries.data[i];
+            const date = new Date(a as number);
+            const year = date.getFullYear();
+            let subSeries = split.get(year);
+            if (!subSeries) {
+                // subSeries = [];
+                subSeries = yearArray.slice();
+                split.set(year, subSeries);
+            }
+            const dayOfYear = new Date(Date.UTC(2000, date.getMonth(), date.getDate())).getDateOfYear();
+            subSeries[dayOfYear] = v as number;
+            // date.setDate(dayInYear);
+            // dateSeries.data[i] = new Date(Date.UTC(2000, date.getMonth(), date.getDate())).valueOf();
+            // subSeries.push(v as number);
+        });
+        dateSeries.data = yearArray.map((v, i) => {
+            const d = new Date(Date.UTC(2000, 0, 1));
+            d.setDate(i + 1);
+            return d.valueOf();
+        });
+        const added = <DataSeries[]>[];
+        split.forEach((value, key, series) => {
+            added.push(<DataSeries>{ name: '' + key, data: value, format: 'number' });
+        });
+        return added;
     }
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button } from 'reactstrap';
 import MonacoEditor from 'react-monaco-editor';
+// import { observable } from 'mobx';  @observable
 
 type Props = {
     data: string;
@@ -11,6 +12,7 @@ type State = {
     text: string;
     warnings: string;
 };
+
 export class JsonEditor extends React.Component<Props, State> {
     private reactEditor: MonacoEditor | null;
     componentWillMount() {

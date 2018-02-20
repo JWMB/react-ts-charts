@@ -7,37 +7,33 @@
           "name": "year",
           "type": "datetime"
         },
+        "series": [
+          {
+            "source": "Value",
+            "muxDemux": [ { "class": "demux", "by": "year"}]
+          }
+        ],
         "parser": "SMHIMinMax"
       }
     ],
     "charts": [
       {
+        "chart": { "height": "600px" },
         "title": {
           "text": "Climate data"
         },
-        "yAxis": [
-          {
-            "title": {
-              "text": "Temp. anomaly NASA GIS",
-              "style": {
-                "color": "colors[0]"
-              }
-            },
-            "labels": {
-              "format": "{value}°C",
-              "style": {
-                "color": "colors[0]"
-              }
-            }
-          }
-        ],
         "series": [
           {
-            "sourceRef": "STHLM::Value",
+            "sourceRef": "STHLM::!rx!^\\d+",
             "name": "STHLM max",
             "lineWidth": 1,
-            "shadow": true, 
+            "color": "hsv(index/allSeries.length * 320, 100, 100)",
+            "shadow": false, 
             "transforms": [
+              {
+                "class": "MovingAverage",
+                "windowLength": 10
+              }
             ]
           }
         ]

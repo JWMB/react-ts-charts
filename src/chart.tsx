@@ -62,12 +62,36 @@ export class Chart extends React.Component<Props, State> {
     createHighChartSeries(seriesDefs: MySeriesOptions[] = []) {
          // { id: string, name: string }
         // const dateSeriesPerSource: { [key: string]: number[]} = { };
-        const all = seriesDefs.map(seriesDef => {
+        const rxFindRx = /(!rx!)(.+)/;
+        const specialAll = seriesDefs.filter(seriesDef => seriesDef.sourceRef.indexOf('!rx!') >= 0);
+        if (specialAll.length) {
+            // Remove original series:
+            specialAll.forEach(s => seriesDefs.splice(seriesDefs.indexOf(s), 1));
+            specialAll.forEach(s => {
+                const m = rxFindRx.exec(s.sourceRef);
+                if (m && m.length > 2) {
+                    const rx = new RegExp(m[2]);
+                    const sForCopy = Object.assign({}, s);
+                    delete sForCopy.source;
+                    const added = s.source.dataSeries.filter(ds => rx.test(ds.name)).map(ds => {
+                        const sCopy = JSON.parse(JSON.stringify(s)) as MySeriesOptions;
+                        sCopy.source = s.source;
+                        sCopy.name = ds.name;
+                        sCopy.sourceRef = ds.name;
+                        return sCopy;
+                    });
+                    seriesDefs = seriesDefs.concat(added);
+                }
+            });
+        }
+        const all = seriesDefs.map((seriesDef, seriesIndex) => {
             const findSeriesBy = seriesDef.sourceRef.indexOf('::') > 0
                 ? seriesDef.sourceRef.split('::')[1]
                 : seriesDef.sourceRef;
             const seriesRef = seriesDef.source.dataSeries.find(series => series.name === findSeriesBy);
             if (seriesRef && seriesRef.data) {
+                const series = Object.assign({}, seriesDef);
+
                 const dateSeries = seriesDef.source.dataSeries.find(o => o.isXValues);
                 if (dateSeries && dateSeries.data) {
                     const orgData = seriesRef.data as string[];
@@ -75,12 +99,23 @@ export class Chart extends React.Component<Props, State> {
                     const data = orgData.map((v: string, i: number) =>
                         v ? ([dateSeries.data[i], parseFloat(v)]) : null);
                     // tslint:disable-next-line:no-any
-                    const series = Object.assign({}, seriesDef);
                     Object.assign(series, { data: data.filter(o => !!o) });
-                    series.data = TransformLibrary.applyTransforms(
-                        series.transforms, series.data as [number, number][]) as Array<[number, number]>;
+                } else {
+                    series.data = seriesRef.data as number[];
                     return series;
                 }
+                if (typeof series.color === 'string') {
+                    if (series.color.indexOf('hsv') === 0) {
+                        // color.hsv(i / arr.length * 360, 60, 80));
+                        // TODO: sandbox!!
+                        const f = Function('index', 'allSeries', 'color', 'return color.' + series.color + ';');
+                        const calculatedColor = f(seriesIndex, seriesDefs, color) as color;
+                        series.color = calculatedColor.rgb().toString();
+                    }
+                }
+                series.data = TransformLibrary.applyTransforms(
+                    series.transforms, series.data as [number, number][]) as Array<[number, number]>;
+                return series;
             }    
             return null;
         });
