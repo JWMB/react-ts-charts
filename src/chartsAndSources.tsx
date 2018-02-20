@@ -1,12 +1,6 @@
 import * as React from 'react';
 import { Chart, ChartConfig, MySeriesOptions } from './chart';
 import { DataSource } from './dataSource';
-// import { Collapse } from 'react-collapse';
-// import { JsonEditor } from './jsonEditor';
-// import { Button } from 'reactstrap';
-// import * as chartConfig from './assets/climate.chartsource.json';
-// import { stringify2 } from './stringify2';
-// import * as editorSchema from './editorSchema.json';
 
 type ChartDef = ChartConfig;
 type Config = {
@@ -27,13 +21,7 @@ type State = {
 
 export class ChartsAndSources extends React.Component<Props, State> {
   componentWillMount() {
-    // https://www.esrl.noaa.gov/psd/enso/mei/table.html
-    // http://www.remss.com/research/climate/
-
-    // let configAsString = stringify2(chartConfig, { maxLength: 80, indent: 2 });
     this.setState({
-      // configDef: configAsString,
-      // configDefIsOpen: false,
       sources: []
     });
   }
@@ -75,7 +63,7 @@ export class ChartsAndSources extends React.Component<Props, State> {
       listItems =
         [(
           <div key="0">
-            loading...
+            {this.state.sources && this.state.sources.length ? 'loading...' : 'N/A'}
           </div>
         )];
     }
@@ -83,25 +71,11 @@ export class ChartsAndSources extends React.Component<Props, State> {
     return (
       <div>
         <div>
-          {/*<div>Sources/charts definition</div>
-           <Button onClick={this.handleToggleClick}>
-            {this.state.configDefIsOpen ? 'close' : 'open'}
-          </Button>
-          <Collapse isOpened={this.state.configDefIsOpen}>
-            <JsonEditor onSubmit={this.handleSubmitChartsDef} data={this.state.configDef} schema={editorSchema} />
-          </Collapse> */}
-        </div>
-        <div>
           {listItems}
         </div>
       </div>
     );
   }
-
-  // private handleToggleClick = () => this.toggleChartsDef();
-  // private toggleChartsDef() {
-  //   this.setState(ps => ({ configDefIsOpen: !ps.configDefIsOpen }));
-  // }
 
   private handleSubmitChartsDef = (data: string) => { // Object | Array<Object>
     this.submitConfigDef(JSON.parse(data) as Config);
@@ -114,6 +88,10 @@ export class ChartsAndSources extends React.Component<Props, State> {
   }
 
   private submitConfigDef(config: Config) {
+    if (!config.sources) {
+      this.setState({ sources: [], charts: [] });
+      return;
+    }
     const newSourceDefs = config.sources.filter(s => !this.state.sources.find(o => o.name === s.name));
     let newSources: DataSource[] = [];
     newSources = newSources.concat(newSourceDefs.map(o => {
