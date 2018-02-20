@@ -20,6 +20,7 @@
       {
         "title": "Syncs",
         "defaultSource": "CMDB",
+        "chart": { "height": "600px" },
         "yAxis": {
           "title": {
             "text": "Number of accounts"
@@ -33,11 +34,6 @@
           {
             "sourceRef": "Syncs_onlySchools=false",
             "name": "Daily parent syncs"
-          },
-          {
-            "sourceRef": "UniqueSyncsPerWeek",
-            "name": "Weekly unique syncs",
-            "lineWidth": 0
           },
           {
             "sourceRef": "UniqueSyncsPerWeek",
@@ -70,6 +66,11 @@
                 ]
               }
             ]
+          },
+          {
+            "sourceRef": "UniqueSyncsPerWeek",
+            "name": "Weekly unique syncs",
+            "lineWidth": 0
           },
           {
             "sourceRef": "UniqueSyncsPerWeek",
