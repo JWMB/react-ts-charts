@@ -1,1 +1,0 @@
-declare module 'json-stringify-pretty-compact';
