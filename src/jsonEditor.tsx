@@ -116,12 +116,26 @@ export class JsonEditor extends React.Component<Props, State> {
             const parsed = JSON.parse(this.state.text);
             // this.props.onSubmit(parsed.config ? JSON.stringify(parsed.config) : parsed);
             if (parsed.config) {
+                const m = /"config"\s*:\s*{/.exec(this.state.text);
+                if (m && m.length) {
+                    let str = '{\n' + this.state.text.substr(m.index + m[0].length);
+                    str = str.substr(0, str.lastIndexOf('}')).trim();
+                    try {
+                        JSON.parse(str);
+                        this.props.onSubmit(str);
+                        return;
+                    } catch (err) {
+                        // tslint:disable-next-line:no-console
+                        console.log(err);
+                    }
+                }
                 this.props.onSubmit(JSON.stringify(parsed.config));
             } else {
                 this.props.onSubmit(this.state.text);
             }
         }
     }
+
     private validate(): boolean {
         try {
             JSON.parse(this.state.text);
