@@ -4,6 +4,10 @@ This project is the output of my first react dabbling.
 
 Bootstrapped with [TypeScript React Starter](https://github.com/Microsoft/TypeScript-React-Starter).
 
+Add .env.local to root to override environment REACT_APP_* variables
+The only custom usage is currently in data source's url, e.g.
+{process.env.REACT_APP_DEFAULT_DATA_API}/azure/cache
+
 ## Problems
 ### highcharts-exporting
 doesn't work with react-highcharts?
