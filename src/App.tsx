@@ -54,13 +54,9 @@ class App extends React.Component<object, State> {
     }
   }
   loadDefinition(key: string) {
-    if (key === 'New...') {
-      this.setState({ configDef: '{}' });
-    } else {
-      const def = ChartDefinitionStore.get(key);
-      if (def) {
-        this.setState({ configDef: def, currentConfigKey: key, currentConfigUnsaved: false });
-      }
+    const def = key === 'New...' ? '{}' : ChartDefinitionStore.get(key);
+    if (def) {
+      this.setState({ configDef: def, currentConfigKey: key, currentConfigUnsaved: false });
     }
   }
   saveDefinition(key?: string) {
@@ -71,20 +67,45 @@ class App extends React.Component<object, State> {
   render() {
     const storedKeys = ChartDefinitionStore.keys;
     storedKeys.push('New...');
-    // const fClick = (key: string) => {
-    //   console.log('clicked ' + key);
-    //  };
+    const fEnter = (key: React.KeyboardEvent<HTMLInputElement>) => {
+      if (key.key === 'Enter') {
+        // tslint:disable-next-line:no-console
+        // console.log('clicked', key.target, key.charCode, key.key, key.keyCode);
+        const k = (key.target as HTMLInputElement).value;
+        if (storedKeys.indexOf(k) < 0) {
+          ChartDefinitionStore.set(k, this.state.configDef);
+          this.setState({ currentConfigKey: k, currentConfigUnsaved: false });
+        }
+      }
+    };
+    const fRenderKey = (k: string) => {
+      return this.state.currentConfigKey === k && k === 'New...'
+        ? (<input type="text" onKeyDown={(key) => fEnter(key)} />)
+        : (
+          <span>
+            <span
+              onClick={() => { this.loadDefinition(k); }}
+              style={({ fontWeight: this.state.currentConfigKey === k ? 'bold' : 'normal' })}
+            >
+              {k}
+            </span>
+            {(this.state.currentConfigKey === k && this.state.currentConfigUnsaved) ?
+                (<span onClick={() => this.saveDefinition()}>&nbsp;Save</span>) : (<span />)}
+          </span>
+        );
+    };
+
     const storedDefinitions = storedKeys.map(k => (
       <div key={k} >
-        <span
+        {fRenderKey(k)}
+        {/* <span
           onClick={() => { this.loadDefinition(k); }}
           style={({ fontWeight: this.state.currentConfigKey === k ? 'bold' : 'normal' })}
         >
           {k}
         </span>
         {(this.state.currentConfigKey === k && this.state.currentConfigUnsaved) ?
-          (<span onClick={() => this.saveDefinition()}>&nbsp;Save</span>) : (<span/>)}
-        {/* {Math.random() < 0.5 ? (<span>Save</span>) : (<span/>)} */}
+          (<span onClick={() => this.saveDefinition()}>&nbsp;Save</span>) : (<span/>)} */}
       </div>
     ));
     
