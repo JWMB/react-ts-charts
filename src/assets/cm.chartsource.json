@@ -2,7 +2,7 @@
     "sources": [
       {
         "name": "CMDB",
-        "url": "{process.env.REACT_APP_DEFAULT_DATA_API}/azure/cache",
+        "url": "{process.env.REACT_APP_DEFAULT_DATA_API}/db/cache",
         "xColumn": {
           "name": "Date",
           "type": "datetime"
