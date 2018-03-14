@@ -11,7 +11,7 @@
           {
             "name": "NewTrainingAccounts_total",
             "muxDemux": [ { "class": "join",
-              "inputs": ["NewTrainingAccounts_parents=true", "NewTrainingAccounts_parents=false"]}]
+              "inputs": ["NewTrainingAccounts_parents=True", "NewTrainingAccounts_parents=False"]}]
           }
         ]
       }
@@ -28,12 +28,12 @@
         },
         "series": [
           {
-            "sourceRef": "Syncs_onlySchools=true",
+            "sourceRef": "Syncs_onlySchools=True",
             "name": "Daily school syncs"
           },
           {
-            "sourceRef": "Syncs_onlySchools=false",
-            "name": "Daily parent syncs"
+            "sourceRef": "Syncs_onlySchools=False",
+            "name": "Daily total syncs"
           },
           {
             "sourceRef": "UniqueSyncsPerWeek",
@@ -118,7 +118,7 @@
         },
         "series": [
           {
-            "sourceRef": "NewTrainingAccounts_parents=true",
+            "sourceRef": "NewTrainingAccounts_parents=True",
             "name": "Created (parents)",
             "transforms": [
               {
@@ -127,7 +127,7 @@
             ]
           },
           {
-            "sourceRef": "NewTrainingAccounts_parents=false",
+            "sourceRef": "NewTrainingAccounts_parents=False",
             "name": "Created (schools)",
             "transforms": [
               {
@@ -164,11 +164,11 @@
         },
         "series": [
           {
-            "sourceRef": "CMDB::NewTrainingAccounts_parents=true",
+            "sourceRef": "CMDB::NewTrainingAccounts_parents=True",
             "name": "Created (parents)"
           },
           {
-            "sourceRef": "CMDB::NewTrainingAccounts_parents=false",
+            "sourceRef": "CMDB::NewTrainingAccounts_parents=False",
             "name": "Created (schools)"
           },
           {
