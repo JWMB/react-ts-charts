@@ -19,7 +19,7 @@
     "react-highcharts": "^16.0.2",
     "react-monaco-editor": "^0.13.0",
     "react-motion": "^0.5.2",
-    "react-scripts-ts": "2.13.0",
+    "react-scripts-ts": "2.14.0",
     "react-transition-group": "^2.2.1",
     "reactstrap": "^4.8.0"
   },
@@ -34,7 +34,7 @@
     "@types/bootstrap": "^3.3.39",
     "@types/color": "^3.0.0",
     "@types/deepmerge": "^1.3.3",
-    "@types/highcharts": "^5.0.19",
+    "@types/highcharts": "^5.0.20",
     "@types/jest": "^22.2.0",
     "@types/node": "^9.4.7",
     "@types/react": "^16.0.40",
