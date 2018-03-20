@@ -176,6 +176,34 @@
             "name": "Started"
           }
         ]
+      },
+      {
+        "title": "Time/phases",
+        "yAxis": {
+          "title": {
+            "text": ""
+          }
+        },
+        "series": [
+          {
+            "sourceRef": "CMDB::Phases",
+            "name": "Phases",
+            "transforms": [
+              {
+                "class": "Integral"
+              }
+            ]
+          },
+          {
+            "sourceRef": "CMDB::LoggedTime",
+            "name": "Logged time",
+            "transforms": [
+              {
+                "class": "Integral"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
