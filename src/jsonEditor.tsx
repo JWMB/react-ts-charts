@@ -75,21 +75,10 @@ export class JsonEditor extends React.Component<Props, State> {
                     // editorDidMount={::this.editorDidMount}
                     editorWillMount={this.handleMonacoWillMount}
                 />
-                {/* <textarea
-                    style={{ width: '100%', height: '200px' }}
-                    onChange={this.handleTextAreaChange}
-                    value={this.state.text}
-                /> */}
                 <div>{this.state.warnings}</div>
                 <Button onClick={this.handleSubmit}>
                     Update
                 </Button>
-                {/* <input
-                    type="button"
-                    value="Update"
-                    onClick={this.handleSubmit}
-                    disabled={!!this.state.warnings.length}
-                /> */}
             </div>
         );
     }
