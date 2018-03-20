@@ -11,6 +11,7 @@ const localStorageMock = {
   setItem: jest.fn(),
   clear: jest.fn()
 };
+// tslint:disable-next-line:no-any
 (global as any).localStorage = localStorageMock;
 
 it('renders without crashing', () => {
