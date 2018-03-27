@@ -198,9 +198,8 @@
             "sourceRef": "CMDB::LoggedTime",
             "name": "Logged time",
             "transforms": [
-              {
-                "class": "Integral"
-              }
+              { "class": "Integral" },
+              { "class": "UserCode", "code": "value * 24 * 60" }
             ]
           }
         ]

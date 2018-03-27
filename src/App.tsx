@@ -4,7 +4,7 @@ import { ChartsAndSources } from './chartsAndSources';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 // import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 // Row, Col, Card, CardTitle, CardText, Button
-import { DryRun } from './dryrun';
+// import { DryRun } from './dryrun';
 import { JsonEditor } from './jsonEditor';
 // import * as chartConfig from './assets/climate.chartsource.json';
 // import * as chartConfig from './assets/swedenclimate.chartsource.json';
@@ -13,6 +13,7 @@ import * as chartSchema from './editorSchema.json';
 
 import { stringify2 } from './stringify2';
 import { ChartDefinitionStore } from './chartDefinitionStore';
+import { default as axios } from 'axios';
 
 // https://www.esrl.noaa.gov/psd/enso/mei/table.html
 // http://www.remss.com/research/climate/
@@ -27,8 +28,24 @@ type State = {
 
 class App extends React.Component<object, State> {
   componentWillMount() {
-    DryRun.tests();
+    // DryRun.tests();
 
+    if (window.location.search) {
+      let query = window.location.search;
+      const rxParams = /(\?|\&)([^=]+)\=([^&]+)/g;
+      // tslint:disable-next-line:no-any
+      const params: any = {};
+      while (true) {
+        const m = rxParams.exec(query);
+        if (!m) {
+          break;
+        }
+        params[m[2]] = m[3];
+      }
+      if (params.config) {
+        this.loadDefinitionFromUrl(params.config, params.cacheExpireDays);
+      }
+    }
     let currentConfigKey = 'default';
     let defaultConfig = '{}';
     if (ChartDefinitionStore.keys.length === 0) {
@@ -53,11 +70,35 @@ class App extends React.Component<object, State> {
       });
     }
   }
+  loadDefinitionFromUrl(url: string, cacheExpireDays: number = 0) {
+    let gdriveRxStr = '(https://drive.google.com/open?id=)';
+    gdriveRxStr = gdriveRxStr
+      .replace(/\//g, '\\/')
+      .replace(/\?/g, '\\?')
+      .replace(/\./g, '\\.');
+    const gdriveMatch = new RegExp(gdriveRxStr + '(.+)').exec(url);
+    if (gdriveMatch && gdriveMatch.length > 1) {
+      url = 'https://drive.google.com/uc?export=download&id=' + gdriveMatch[2];
+    }
+    const corsURL = process.env.REACT_APP_DEFAULT_DATA_API + '/corscheat/?url='
+      + encodeURIComponent(url) + '&cacheExpireDays=' + (cacheExpireDays || 0);
+    
+    axios.get(corsURL).then(response => {
+      const key = 'external';
+      const value = stringify2(response.data, { maxLength: 80, indent: 2 });
+      ChartDefinitionStore.set(key, value);
+      this.setState({ configDef: value, currentConfigKey: key, currentConfigUnsaved: true });
+    });
+  }
   loadDefinition(key: string) {
     const def = key === 'New...' ? '{}' : ChartDefinitionStore.get(key);
     if (def) {
       this.setState({ configDef: def, currentConfigKey: key, currentConfigUnsaved: false });
     }
+  }
+  removeDefinition(key: string) {
+    ChartDefinitionStore.remove(key);
+    this.setState({ currentConfigUnsaved: false });
   }
   saveDefinition(key?: string) {
     key = key || this.state.currentConfigKey;
@@ -90,7 +131,8 @@ class App extends React.Component<object, State> {
               {k}
             </span>
             {(this.state.currentConfigKey === k && this.state.currentConfigUnsaved) ?
-                (<span onClick={() => this.saveDefinition()}>&nbsp;Save</span>) : (<span />)}
+              (<span onClick={() => this.saveDefinition()}>&nbsp;Save</span>) : (<span />)}
+            <span onClick={() => this.removeDefinition(k)}>&nbsp;DEL</span>
           </span>
         );
     };

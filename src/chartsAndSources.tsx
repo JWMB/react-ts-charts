@@ -78,7 +78,17 @@ export class ChartsAndSources extends React.Component<Props, State> {
   }
 
   private handleSubmitChartsDef = (data: string) => { // Object | Array<Object>
-    this.submitConfigDef(JSON.parse(data) as Config);
+    if (typeof data !== 'string') {
+      throw new Error('data not a string');
+    }
+    // tslint:disable-next-line:no-any
+    let parsed: any = null;
+    try {
+      parsed = JSON.parse(data);
+    } catch (err) {
+      throw new Error('Couldn\'t parse data: ' + err + '\n' + data);
+    }
+    this.submitConfigDef(parsed as Config);
     // try {
     //   const dataObj = JSON.parse(this.state.chartsDef);
     //   this.submitChartsDef(dataObj as ChartsDef[]);
