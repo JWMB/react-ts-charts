@@ -30,11 +30,11 @@ class App extends React.Component<object, State> {
   componentWillMount() {
     // DryRun.tests();
 
+    // tslint:disable-next-line:no-any
+    const params: any = {};
     if (window.location.search) {
       let query = window.location.search;
       const rxParams = /(\?|\&)([^=]+)\=([^&]+)/g;
-      // tslint:disable-next-line:no-any
-      const params: any = {};
       while (true) {
         const m = rxParams.exec(query);
         if (!m) {
@@ -42,25 +42,36 @@ class App extends React.Component<object, State> {
         }
         params[m[2]] = m[3];
       }
-      if (params.config) {
-        this.loadDefinitionFromUrl(params.config, params.cacheExpireDays);
+    }
+    if (!params.config) {
+      if (process.env.REACT_APP_DEFAULT_EXTERNAL_CONFIG) {
+        // tslint:disable-next-line:no-console
+        console.log('ooo', process.env.REACT_APP_DEFAULT_EXTERNAL_CONFIG);
+        params.config = process.env.REACT_APP_DEFAULT_EXTERNAL_CONFIG;
+        params.cacheExpireDays = 0;
       }
     }
-    let currentConfigKey = 'default';
-    let defaultConfig = '{}';
-    if (ChartDefinitionStore.keys.length === 0) {
-      defaultConfig = stringify2(chartConfig, { maxLength: 80, indent: 2 });
-      ChartDefinitionStore.set(currentConfigKey, defaultConfig);
+
+    if (params.config) {
+      this.loadDefinitionFromUrl(params.config, params.cacheExpireDays);
+      this.setState({ activeTab: '1', configDef: '{}' });
     } else {
-      currentConfigKey = ChartDefinitionStore.keys[0];
-      defaultConfig = ChartDefinitionStore.get(currentConfigKey) as string;
-    }
-    this.setState({
-      activeTab: '1',
-      configDef: defaultConfig,
-      currentConfigKey: currentConfigKey,
-      currentConfigUnsaved: false
-    });
+      let currentConfigKey = 'default';
+      let defaultConfig = '{}';
+      if (ChartDefinitionStore.keys.length === 0) {
+        defaultConfig = stringify2(chartConfig, { maxLength: 80, indent: 2 });
+        ChartDefinitionStore.set(currentConfigKey, defaultConfig);
+      } else {
+        currentConfigKey = ChartDefinitionStore.keys[0];
+        defaultConfig = ChartDefinitionStore.get(currentConfigKey) as string;
+      }
+      this.setState({
+        activeTab: '1',
+        configDef: defaultConfig,
+        currentConfigKey: currentConfigKey,
+        currentConfigUnsaved: false
+      });
+    }  
   }
   toggle(tab: string) {
     if (this.state.activeTab !== tab) {

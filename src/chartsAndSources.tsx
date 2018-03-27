@@ -79,7 +79,7 @@ export class ChartsAndSources extends React.Component<Props, State> {
 
   private handleSubmitChartsDef = (data: string) => { // Object | Array<Object>
     if (typeof data !== 'string') {
-      throw new Error('data not a string');
+      throw new Error('data not a string: ' + (typeof data));
     }
     // tslint:disable-next-line:no-any
     let parsed: any = null;
